@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MJM Nursery — Premium Oil Palm Seedlings | Mega Jutamas Sdn Bhd</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--forest:#1a2e10;--bark:#2e1a08;--moss:#2d4a1a;--leaf:#4a7a2a;--sprout:#6aaa38;--lime:#9dd858;--mist:#edf5dc;--cream:#f8f4ec;--sand:#e0d4bc;--amber:#c07010;--rust:#a82818;--white:#fdfaf4;--ink:#18120a;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);overflow-x:hidden;cursor:none;}
+.cursor{width:12px;height:12px;background:var(--sprout);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s,width .2s,height .2s;mix-blend-mode:multiply;}
+.cursor.big{width:38px;height:38px;background:rgba(106,170,56,.22);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 4vw;height:70px;display:flex;align-items:center;justify-content:space-between;transition:background .3s,box-shadow .3s;}
+nav.scrolled{background:rgba(26,46,16,.97);backdrop-filter:blur(14px);box-shadow:0 2px 30px rgba(0,0,0,.3);}
+.nav-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;}
+.nav-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--sprout),var(--moss));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.nav-logo-text strong{font-family:'Playfair Display',serif;font-size:1.25rem;color:#fff;}
+.nav-logo-text span{display:block;font-size:.6rem;color:rgba(255,255,255,.42);letter-spacing:.1em;text-transform:uppercase;}
+.nav-links{display:flex;gap:1.7rem;align-items:center;}
+.nav-links a{color:rgba(255,255,255,.72);text-decoration:none;font-size:.87rem;font-weight:500;transition:color .2s;}
+.nav-links a:hover{color:var(--lime);}
+.nav-shop-btn{background:linear-gradient(135deg,var(--sprout),var(--leaf));color:#fff !important;padding:.46rem 1.15rem;border-radius:8px;font-weight:600 !important;box-shadow:0 3px 12px rgba(74,122,42,.4);display:flex;align-items:center;gap:.45rem;}
+.nav-shop-btn:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(74,122,42,.5);}
+.nav-portal-tab{color:rgba(255,255,255,.38) !important;font-size:.78rem !important;border:1px solid rgba(255,255,255,.1);padding:.36rem .82rem;border-radius:6px;}
+.nav-portal-tab:hover{color:rgba(255,255,255,.7) !important;border-color:rgba(255,255,255,.25) !important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.3rem;}
+.hamburger span{width:24px;height:2px;background:#fff;border-radius:2px;}
+
+/* MOBILE MENU */
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,18,6,.97);z-index:190;flex-direction:column;align-items:center;justify-content:center;gap:1.8rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:rgba(255,255,255,.8);text-decoration:none;font-size:1.3rem;font-weight:500;font-family:'Playfair Display',serif;}
+.mobile-menu a:hover{color:var(--lime);}
+.mobile-close{position:absolute;top:1.5rem;right:2rem;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;background:linear-gradient(160deg,#0d1a07 0%,#1a2e0d 45%,#2a1a06 100%);}
+.hero-bg-grid{position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(154,216,88,.05) 1px,transparent 0);background-size:40px 40px;}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;}
+.hero-orb.a{width:600px;height:600px;background:rgba(74,122,42,.15);top:-150px;right:-100px;}
+.hero-orb.b{width:400px;height:400px;background:rgba(74,50,16,.2);bottom:-100px;left:-80px;}
+.hero-orb.c{width:300px;height:300px;background:rgba(106,170,56,.08);top:40%;left:30%;}
+.hero-content{position:relative;z-index:2;padding:0 4vw;max-width:1300px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(106,170,56,.12);border:1px solid rgba(106,170,56,.25);color:var(--lime);font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:.4rem 1rem;border-radius:20px;margin-bottom:1.5rem;animation:fadeUp .8s ease both;}
+.hero-badge .dot{width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5vw,4.8rem);color:#fff;line-height:1.05;margin-bottom:1.5rem;animation:fadeUp .8s .1s ease both;}
+.hero h1 em{font-style:italic;color:var(--lime);}
+.hero-desc{font-size:1.05rem;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:2rem;max-width:480px;animation:fadeUp .8s .2s ease both;}
+
+/* Hero quality pills */
+.hero-quality-pills{display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:2.5rem;animation:fadeUp .8s .25s ease both;}
+.quality-pill{display:inline-flex;align-items:center;gap:.42rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.85);font-size:.78rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;letter-spacing:.02em;}
+.quality-pill .pill-icon{font-size:.9rem;}
+.quality-pill.gold{background:rgba(192,112,16,.15);border-color:rgba(192,112,16,.3);color:#f0c050;}
+.quality-pill.green{background:rgba(106,170,56,.15);border-color:rgba(106,170,56,.3);color:var(--lime);}
+.quality-pill.teal{background:rgba(26,138,106,.15);border-color:rgba(26,138,106,.3);color:#5dd8a0;}
+
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .8s .3s ease both;}
+.btn-primary{background:linear-gradient(135deg,var(--sprout),var(--leaf));color:#fff;text-decoration:none;padding:.9rem 2rem;border-radius:12px;font-weight:600;font-size:.95rem;transition:all .2s;box-shadow:0 4px 20px rgba(74,122,42,.4);display:inline-flex;align-items:center;gap:.5rem;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(74,122,42,.5);}
+.btn-outline{border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.8);text-decoration:none;padding:.88rem 1.8rem;border-radius:12px;font-weight:500;font-size:.95rem;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem;}
+.btn-outline:hover{border-color:var(--lime);color:var(--lime);}
+
+/* Hero right side — quality showcase instead of stats */
+.hero-visual{animation:fadeUp .8s .15s ease both;}
+.hero-showcase{background:rgba(255,255,255,.05);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:2rem;position:relative;overflow:hidden;}
+.hero-showcase::before{content:'';position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(ellipse,rgba(106,170,56,.12),transparent 70%);pointer-events:none;}
+.hs-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;margin-bottom:.3rem;}
+.hs-sub{font-size:.79rem;color:rgba(255,255,255,.45);margin-bottom:1.5rem;}
+.hs-features{display:flex;flex-direction:column;gap:.85rem;margin-bottom:1.8rem;}
+.hs-feature{display:flex;align-items:center;gap:.9rem;padding:.85rem 1rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;}
+.hs-feature-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.hfi-gold{background:linear-gradient(135deg,rgba(192,112,16,.4),rgba(192,112,16,.2));}
+.hfi-green{background:linear-gradient(135deg,rgba(74,122,42,.5),rgba(74,122,42,.25));}
+.hfi-teal{background:linear-gradient(135deg,rgba(26,138,106,.4),rgba(26,138,106,.2));}
+.hs-feature-text strong{display:block;font-size:.88rem;font-weight:600;color:#fff;margin-bottom:.1rem;}
+.hs-feature-text span{font-size:.76rem;color:rgba(255,255,255,.45);}
+.hs-divider{height:1px;background:rgba(255,255,255,.08);margin-bottom:1.2rem;}
+.hs-cert-row{display:flex;gap:.5rem;flex-wrap:wrap;}
+.hs-cert{font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:.25rem .65rem;border-radius:20px;background:rgba(106,170,56,.12);border:1px solid rgba(106,170,56,.22);color:var(--lime);}
+
+@keyframes floatCard{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.float-anim{animation:floatCard 5s ease-in-out infinite;}
+
+/* STATS */
+.stats-strip{background:var(--forest);padding:3rem 4vw;}
+.stats-inner{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;}
+.stat-item{text-align:center;}
+.stat-item .num{font-family:'Playfair Display',serif;font-size:3rem;color:var(--lime);font-weight:700;line-height:1;}
+.stat-item .lbl{font-size:.82rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.07em;margin-top:.4rem;}
+
+/* SECTIONS */
+section{padding:6rem 4vw;}
+.section-inner{max-width:1300px;margin:0 auto;}
+.section-tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sprout);background:rgba(106,170,56,.08);border:1px solid rgba(106,170,56,.2);padding:.3rem .9rem;border-radius:20px;margin-bottom:1.2rem;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);color:var(--bark);line-height:1.1;margin-bottom:1rem;}
+.section-title em{font-style:italic;color:var(--sprout);}
+.section-desc{font-size:1rem;color:#6a5a48;line-height:1.7;max-width:580px;}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;margin-top:4rem;}
+.about-img{position:relative;}
+.about-img-main{width:100%;aspect-ratio:4/5;background:linear-gradient(145deg,var(--forest),var(--moss));border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:8rem;position:relative;overflow:hidden;}
+.about-img-main::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 70%,rgba(106,170,56,.25),transparent 60%);}
+.about-img-badge{position:absolute;bottom:-1.5rem;right:-1.5rem;background:var(--white);border-radius:16px;padding:1.2rem 1.5rem;box-shadow:0 8px 40px rgba(0,0,0,.12);border:1px solid var(--sand);}
+.about-img-badge strong{display:block;font-family:'Playfair Display',serif;font-size:2rem;color:var(--bark);}
+.about-img-badge span{font-size:.75rem;color:#8a7a68;text-transform:uppercase;letter-spacing:.06em;}
+.about-features{display:flex;flex-direction:column;gap:1.2rem;margin-top:2.5rem;}
+.feature-row{display:flex;gap:1rem;align-items:flex-start;}
+.feature-icon{width:44px;height:44px;border-radius:12px;background:var(--mist);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.feature-text strong{display:block;font-size:.92rem;font-weight:600;color:var(--bark);margin-bottom:.2rem;}
+.feature-text p{font-size:.84rem;color:#8a7a68;line-height:1.5;}
+
+/* ===== SHOP ===== */
+#shop{background:var(--cream);}
+.shop-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1.5rem;}
+.shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.shop-card{background:var(--white);border-radius:20px;border:1px solid var(--sand);overflow:hidden;transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;}
+.shop-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.1);}
+.shop-img{height:200px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;}
+.shop-img.a{background:linear-gradient(145deg,#1a2e10,#2d4a1a);}
+.shop-img.b{background:linear-gradient(145deg,#2e1a08,#4a3010);}
+.shop-img.c{background:linear-gradient(145deg,#0d2018,#1a3828);}
+.shop-img.d{background:linear-gradient(145deg,#1a1a2e,#2a2a4a);}
+.shop-img.e{background:linear-gradient(145deg,#2e2008,#4a3818);}
+.shop-img.f{background:linear-gradient(145deg,#0a2010,#1a3820);}
+.stock-chip{position:absolute;top:.75rem;left:.75rem;font-size:.68rem;font-weight:700;padding:.25rem .65rem;border-radius:20px;letter-spacing:.04em;}
+.stock-in{background:rgba(106,170,56,.9);color:#fff;}
+.stock-low{background:rgba(192,112,16,.9);color:#fff;}
+.stock-out{background:rgba(168,40,24,.85);color:#fff;}
+.shop-body{padding:1.4rem;flex:1;display:flex;flex-direction:column;}
+
+/* quality badges on shop cards */
+.shop-quality-badges{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.9rem;}
+.sqb{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.22rem .6rem;border-radius:20px;}
+.sqb-gold{background:rgba(192,112,16,.1);color:var(--amber);}
+.sqb-green{background:rgba(74,122,42,.1);color:var(--leaf);}
+.sqb-teal{background:rgba(26,138,106,.1);color:#1a8a6a;}
+
+.shop-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--bark);margin-bottom:.45rem;}
+.shop-desc{font-size:.81rem;color:#8a7a68;line-height:1.55;margin-bottom:1rem;flex:1;}
+.shop-specs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.spec-tag{font-size:.71rem;background:var(--cream);color:#6a5a48;padding:.2rem .55rem;border-radius:20px;border:1px solid var(--sand);}
+.shop-footer{border-top:1px solid var(--sand);padding-top:1rem;display:flex;align-items:center;justify-content:space-between;gap:.8rem;}
+.shop-price .price-label{font-size:.65rem;color:#aaa;text-transform:uppercase;letter-spacing:.05em;}
+.shop-price .price-value{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--bark);line-height:1;}
+.shop-price .price-unit{font-size:.71rem;color:#8a7a68;}
+.btn-order{background:linear-gradient(135deg,var(--sprout),var(--leaf));color:#fff;border:none;border-radius:10px;padding:.62rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 3px 10px rgba(74,122,42,.3);white-space:nowrap;}
+.btn-order:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(74,122,42,.4);}
+.btn-order:disabled{background:#ccc;box-shadow:none;cursor:not-allowed;transform:none;}
+
+/* CART DRAWER */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;display:none;backdrop-filter:blur(3px);}
+.cart-overlay.open{display:block;}
+.cart-drawer{position:fixed;right:0;top:0;bottom:0;width:420px;max-width:100vw;background:var(--white);z-index:301;transform:translateX(100%);transition:transform .35s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.15);}
+.cart-drawer.open{transform:translateX(0);}
+.cart-head{padding:1.3rem 1.5rem;border-bottom:1px solid var(--sand);display:flex;align-items:center;justify-content:space-between;}
+.cart-head h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--bark);}
+.cart-close{background:none;border:1px solid var(--sand);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem;color:#8a7a68;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.cart-close:hover{background:var(--cream);}
+.cart-items{flex:1;overflow-y:auto;padding:1.2rem 1.5rem;display:flex;flex-direction:column;gap:.9rem;}
+.cart-empty{text-align:center;padding:3rem 1rem;color:#aaa;}
+.cart-empty .icon{font-size:3rem;margin-bottom:.8rem;}
+.cart-item{display:flex;gap:1rem;align-items:flex-start;padding:1rem;background:var(--cream);border-radius:12px;border:1px solid var(--sand);}
+.cart-item-icon{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--moss),var(--forest));display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.cart-item-info{flex:1;}
+.cart-item-name{font-size:.86rem;font-weight:600;color:var(--bark);}
+.cart-item-price{font-size:.79rem;color:#8a7a68;margin-top:.15rem;}
+.cart-qty{display:flex;align-items:center;gap:.5rem;margin-top:.55rem;}
+.qty-btn{width:26px;height:26px;border-radius:6px;border:1px solid var(--sand);background:var(--white);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;color:var(--bark);transition:all .15s;}
+.qty-btn:hover{border-color:var(--sprout);color:var(--sprout);}
+.qty-val{font-size:.88rem;font-weight:600;color:var(--bark);min-width:28px;text-align:center;}
+.cart-item-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:.8rem;transition:color .15s;margin-left:.3rem;}
+.cart-item-del:hover{color:var(--rust);}
+.cart-foot{padding:1.3rem 1.5rem;border-top:1px solid var(--sand);}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.7rem;}
+.cart-total-label{font-size:.85rem;color:#8a7a68;}
+.cart-total-val{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--bark);}
+.cart-note{font-size:.74rem;color:#aaa;margin-bottom:1rem;line-height:1.5;}
+.btn-checkout{width:100%;background:linear-gradient(135deg,var(--sprout),var(--leaf));color:#fff;border:none;border-radius:12px;padding:.9rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(74,122,42,.3);transition:all .2s;}
+.btn-checkout:hover{transform:translateY(-1px);}
+.btn-checkout:disabled{background:#ccc;box-shadow:none;transform:none;cursor:not-allowed;}
+
+/* ORDER MODAL */
+.order-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:400;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(5px);}
+.order-overlay.open{display:flex;}
+.order-modal{background:var(--white);border-radius:24px;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,.25);animation:modalIn .3s cubic-bezier(.22,1,.36,1) both;}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(16px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.order-head{padding:1.5rem 1.8rem;border-bottom:1px solid var(--sand);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:10;border-radius:24px 24px 0 0;}
+.order-head h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--bark);}
+.order-close-btn{background:none;border:1px solid var(--sand);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem;color:#8a7a68;display:flex;align-items:center;justify-content:center;}
+.order-body{padding:1.8rem;}
+.order-summary{background:var(--cream);border-radius:14px;padding:1.2rem;border:1px solid var(--sand);margin-bottom:1.5rem;}
+.order-summary-title{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#8a7a68;margin-bottom:.8rem;}
+.order-item-row{display:flex;justify-content:space-between;font-size:.87rem;padding:.35rem 0;border-bottom:1px solid rgba(224,212,188,.5);}
+.order-item-row:last-child{border-bottom:none;font-weight:700;color:var(--bark);padding-top:.5rem;}
+.form-group{display:flex;flex-direction:column;gap:.38rem;margin-bottom:.9rem;}
+.form-group label{font-size:.72rem;font-weight:700;color:#6a5a48;text-transform:uppercase;letter-spacing:.06em;}
+.form-group input,.form-group select,.form-group textarea{background:var(--cream);border:1.5px solid var(--sand);border-radius:10px;padding:.65rem .9rem;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--sprout);box-shadow:0 0 0 3px rgba(106,170,56,.12);}
+.form-group textarea{resize:vertical;min-height:80px;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.order-foot{padding:1.2rem 1.8rem;border-top:1px solid var(--sand);display:flex;gap:.8rem;justify-content:flex-end;}
+.btn-cancel-sm{background:none;border:1.5px solid var(--sand);color:#6a5a48;border-radius:10px;padding:.65rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:.88rem;cursor:pointer;}
+.btn-place{background:linear-gradient(135deg,var(--sprout),var(--leaf));color:#fff;border:none;border-radius:10px;padding:.65rem 1.6rem;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;box-shadow:0 3px 12px rgba(74,122,42,.3);transition:all .2s;}
+.btn-place:hover{transform:translateY(-1px);}
+
+/* PROCESS */
+.process-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-top:3.5rem;position:relative;}
+.process-steps::before{content:'';position:absolute;top:32px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--sprout),transparent);z-index:0;}
+.process-step{text-align:center;position:relative;z-index:1;}
+.step-circle{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--sprout),var(--moss));display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 1rem;box-shadow:0 4px 20px rgba(74,122,42,.3);position:relative;}
+.step-num{position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:var(--amber);border-radius:50%;font-size:.68rem;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;}
+.step-title{font-size:.88rem;font-weight:700;color:var(--bark);margin-bottom:.35rem;}
+.step-desc{font-size:.77rem;color:#8a7a68;line-height:1.5;}
+
+/* CERTIFICATIONS */
+.certs-bg{background:linear-gradient(160deg,var(--forest),var(--bark));}
+.certs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:3rem;}
+.cert-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:1.8rem 1.5rem;text-align:center;transition:background .2s,transform .2s;}
+.cert-card:hover{background:rgba(255,255,255,.09);transform:translateY(-2px);}
+.cert-icon{font-size:2.5rem;margin-bottom:.8rem;}
+.cert-title{font-family:'Playfair Display',serif;font-size:1rem;color:#fff;margin-bottom:.4rem;}
+.cert-desc{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.5;}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;margin-top:3.5rem;align-items:start;}
+.contact-items{display:flex;flex-direction:column;gap:1.5rem;margin-top:2rem;}
+.contact-item{display:flex;gap:1rem;align-items:flex-start;}
+.contact-icon{width:44px;height:44px;border-radius:12px;background:var(--mist);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.contact-item strong{display:block;font-size:.85rem;font-weight:600;color:var(--bark);margin-bottom:.2rem;}
+.contact-item p{font-size:.83rem;color:#8a7a68;line-height:1.5;}
+.contact-form-wrap{background:var(--white);border-radius:20px;border:1px solid var(--sand);padding:2rem;box-shadow:0 8px 40px rgba(0,0,0,.06);}
+.contact-form-wrap h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--bark);margin-bottom:1.5rem;}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.btn-submit{width:100%;background:linear-gradient(135deg,var(--sprout),var(--leaf));color:#fff;border:none;border-radius:10px;padding:.85rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(74,122,42,.3);margin-top:.5rem;}
+.btn-submit:hover{transform:translateY(-1px);}
+
+/* FOOTER */
+footer{background:var(--bark);color:#fff;padding:4rem 4vw 2rem;}
+.footer-inner{max-width:1300px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+.footer-brand strong{font-family:'Playfair Display',serif;font-size:1.3rem;display:block;margin-bottom:.5rem;}
+.footer-brand p{font-size:.83rem;color:rgba(255,255,255,.45);line-height:1.6;margin-top:.7rem;max-width:280px;}
+.footer-col h4{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1rem;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:.6rem;}
+.footer-col ul li a{color:rgba(255,255,255,.65);text-decoration:none;font-size:.84rem;transition:color .2s;}
+.footer-col ul li a:hover{color:var(--lime);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-bottom p{font-size:.78rem;color:rgba(255,255,255,.35);}
+.footer-portal-link{color:rgba(255,255,255,.3);text-decoration:none;font-size:.74rem;transition:color .2s;}
+.footer-portal-link:hover{color:rgba(255,255,255,.65);}
+
+/* TOAST */
+.toast-notif{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bark);color:#fff;padding:.8rem 1.6rem;border-radius:12px;font-size:.88rem;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:600;opacity:0;transition:all .3s cubic-bezier(.22,1,.36,1);white-space:nowrap;border-left:4px solid var(--sprout);}
+.toast-notif.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal.delay-1{transition-delay:.1s;}
+.reveal.delay-2{transition-delay:.2s;}
+.reveal.delay-3{transition-delay:.3s;}
+.reveal.delay-4{transition-delay:.4s;}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .hero-content{grid-template-columns:1fr;}.hero-visual{display:none;}
+  .shop-grid{grid-template-columns:1fr 1fr;}
+  .process-steps{grid-template-columns:1fr 1fr 1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .about-grid,.contact-grid{grid-template-columns:1fr;}
+  .about-img{display:none;}
+  .stats-inner{grid-template-columns:1fr 1fr;}
+  .certs-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:720px){
+  section{padding:4rem 5vw;}
+  .nav-links{display:none;}.hamburger{display:flex;}
+  .shop-grid{grid-template-columns:1fr;}
+  .process-steps{grid-template-columns:1fr 1fr;}.process-steps::before{display:none;}
+  .certs-grid{grid-template-columns:1fr 1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .stats-inner{grid-template-columns:1fr 1fr;}
+  .form-grid-2,.fg2{grid-template-columns:1fr;}
+  .cart-drawer{width:100vw;}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="toast-notif" id="toast"></div>
+
+<!-- CART -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-head">
+    <h3>🛒 Your Order</h3>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty"><div class="icon">🌱</div><p>Your cart is empty.<br/>Browse our seedlings below.</p></div>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-total-row">
+      <div class="cart-total-label">Estimated Total</div>
+      <div class="cart-total-val" id="cart-total">RM 0.00</div>
+    </div>
+    <div class="cart-note">💡 Pricing is indicative. Final price confirmed upon order review.</div>
+    <button class="btn-checkout" id="btn-checkout" onclick="openOrderModal()" disabled>Proceed to Order →</button>
+  </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="order-overlay" id="order-overlay">
+  <div class="order-modal">
+    <div class="order-head">
+      <h2>Place Your Order</h2>
+      <button class="order-close-btn" onclick="closeOrderModal()">✕</button>
+    </div>
+    <div class="order-body">
+      <div class="order-summary">
+        <div class="order-summary-title">Order Summary</div>
+        <div id="order-summary-items"></div>
+      </div>
+      <div class="fg2">
+        <div class="form-group"><label>Full Name *</label><input type="text" id="o-name" placeholder="Your full name"/></div>
+        <div class="form-group"><label>Company / Estate</label><input type="text" id="o-company" placeholder="Company or estate"/></div>
+      </div>
+      <div class="fg2">
+        <div class="form-group"><label>Phone *</label><input type="tel" id="o-phone" placeholder="+60 12-345 6789"/></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="o-email" placeholder="your@email.com"/></div>
+      </div>
+      <div class="form-group"><label>Delivery State *</label>
+        <select id="o-state"><option value="">-- Select state --</option><option>Sarawak</option><option>Sabah</option><option>Peninsular Malaysia</option><option>Other</option></select>
+      </div>
+      <div class="form-group"><label>Preferred Delivery Period</label>
+        <select id="o-period"><option value="">-- Select --</option><option>Within 1 month</option><option>1–3 months</option><option>3–6 months</option><option>Flexible</option></select>
+      </div>
+      <div class="form-group"><label>Planting Area (Hectares)</label><input type="number" id="o-hectares" placeholder="e.g. 50"/></div>
+      <div class="form-group"><label>Additional Notes</label><textarea id="o-notes" placeholder="Soil type, access road conditions, special requirements..."></textarea></div>
+    </div>
+    <div class="order-foot">
+      <button class="btn-cancel-sm" onclick="closeOrderModal()">Cancel</button>
+      <button class="btn-place" onclick="placeOrder()">✅ Submit Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mobile-close" onclick="closeMobileMenu()">✕</button>
+  <a href="#about" onclick="closeMobileMenu()">About</a>
+  <a href="#shop" onclick="closeMobileMenu()">Shop</a>
+  <a href="#process" onclick="closeMobileMenu()">Our Process</a>
+  <a href="#certifications" onclick="closeMobileMenu()">Certifications</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+  <a href="nursery-portal.html" style="font-size:.85rem;color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.12);padding:.5rem 1.2rem;border-radius:8px;" onclick="closeMobileMenu()">🔐 Staff Portal</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">🌴</div>
+    <div class="nav-logo-text"><strong>MJM Nursery</strong><span>Mega Jutamas Sdn Bhd</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#shop">Shop</a>
+    <a href="#process">Our Process</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#contact">Contact</a>
+    <a href="#shop" class="nav-shop-btn" onclick="openCart()">🛒 <span id="nav-cart-badge" style="display:none;background:var(--rust);border-radius:50%;width:18px;height:18px;font-size:.62rem;font-weight:700;align-items:center;justify-content:center;">0</span> Cart</a>
+    <a href="nursery-portal.html" class="nav-portal-tab">🔐 Portal</a>
+  </div>
+  <div class="hamburger" onclick="openMobileMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-orb a"></div><div class="hero-orb b"></div><div class="hero-orb c"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-badge"><div class="dot"></div> Sarawak's Premier Oil Palm Nursery</div>
+      <h1>Growing the Future,<br/><em>One Seedling</em><br/>at a Time</h1>
+      <p class="hero-desc">MJM Nursery by Mega Jutamas Sdn Bhd produces premium-grade oil palm seedlings — trusted by plantations across Sarawak and beyond for consistent quality and proven results.</p>
+
+      <!-- Quality pills replacing survival rate / batch stats -->
+      <div class="hero-quality-pills">
+        <div class="quality-pill gold"><span class="pill-icon">🏅</span>Top Quality</div>
+        <div class="quality-pill green"><span class="pill-icon">📈</span>High Yield</div>
+        <div class="quality-pill teal"><span class="pill-icon">🌿</span>Large Fruit Bunch</div>
+      </div>
+
+      <div class="hero-cta">
+        <a href="#shop" class="btn-primary">🛒 Shop Seedlings</a>
+        <a href="#about" class="btn-outline">Learn More →</a>
+      </div>
+    </div>
+
+    <!-- Right side: quality showcase -->
+    <div class="hero-visual float-anim">
+      <div class="hero-showcase">
+        <div class="hs-title">Why Choose MJM?</div>
+        <div class="hs-sub">Plantation-grade quality at every stage</div>
+        <div class="hs-features">
+          <div class="hs-feature">
+            <div class="hs-feature-icon hfi-gold">🏅</div>
+            <div class="hs-feature-text">
+              <strong>Top Quality Seedlings</strong>
+              <span>Three-stage culling with HQ audit verification ensures only the best reach your plantation</span>
+            </div>
+          </div>
+          <div class="hs-feature">
+            <div class="hs-feature-icon hfi-green">📈</div>
+            <div class="hs-feature-text">
+              <strong>High Yield Genetics</strong>
+              <span>MPOB-licensed DxP hybrid material selected for superior oil extraction rates</span>
+            </div>
+          </div>
+          <div class="hs-feature">
+            <div class="hs-feature-icon hfi-teal">🌿</div>
+            <div class="hs-feature-text">
+              <strong>Large Fruit Bunch</strong>
+              <span>Varieties proven for exceptional fresh fruit bunch weight and bunch number</span>
+            </div>
+          </div>
+        </div>
+        <div class="hs-divider"></div>
+        <div class="hs-cert-row">
+          <div class="hs-cert">MPOB Licensed</div>
+          <div class="hs-cert">Dual-Audit Verified</div>
+          <div class="hs-cert">Est. 2009</div>
+          <div class="hs-cert">Drone Census</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item reveal"><div class="num" data-target="15">0</div><div class="lbl">Years of Experience</div></div>
+    <div class="stat-item reveal delay-1"><div class="num" data-target="2000000">0</div><div class="lbl">Seedlings Produced</div></div>
+    <div class="stat-item reveal delay-2"><div class="num" data-target="92">0</div><div class="lbl">% Avg Survival Rate</div></div>
+    <div class="stat-item reveal delay-3"><div class="num" data-target="50">0</div><div class="lbl">Plantation Partners</div></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-img reveal">
+        <div class="about-img-main">🌴</div>
+        <div class="about-img-badge"><strong>2009</strong><span>Est. in Sarawak</span></div>
+      </div>
+      <div>
+        <div class="section-tag reveal">Who We Are</div>
+        <h2 class="section-title reveal">Rooted in <em>Sarawak,</em><br/>Growing for Malaysia</h2>
+        <p class="section-desc reveal">Mega Jutamas Sdn Bhd operates MJM Nursery — one of Sarawak's most trusted oil palm seedling producers. Since 2009, we have supplied high-quality seedlings to estates and smallholders across the region, backed by rigorous quality tracking at every stage of growth.</p>
+        <div class="about-features">
+          <div class="feature-row reveal"><div class="feature-icon">🔬</div><div class="feature-text"><strong>Science-Based Culling</strong><p>Three-stage culling with HQ audit verification ensures only the healthiest seedlings reach your plantation.</p></div></div>
+          <div class="feature-row reveal delay-1"><div class="feature-icon">📊</div><div class="feature-text"><strong>Full Batch Traceability</strong><p>Every batch tracked from seed receipt through transplanting, culling and transfer with digital records.</p></div></div>
+          <div class="feature-row reveal delay-2"><div class="feature-icon">🌿</div><div class="feature-text"><strong>MPOB-Certified Genetics</strong><p>We source exclusively from MPOB-licensed seed producers for superior yield potential and disease resistance.</p></div></div>
+          <div class="feature-row reveal delay-3"><div class="feature-icon">🚛</div><div class="feature-text"><strong>On-Time Delivery</strong><p>Structured transfer schedules with full SIN and delivery order documentation for every consignment.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section id="shop">
+  <div class="section-inner">
+    <div class="shop-header">
+      <div>
+        <div class="section-tag reveal">Buy Direct</div>
+        <h2 class="section-title reveal">Order <em>Seedlings</em> Online</h2>
+        <p class="section-desc reveal">Browse our available oil palm seedlings and place your enquiry directly. Our team will confirm availability and delivery schedule within 1 business day.</p>
+      </div>
+    </div>
+    <div class="shop-grid" id="shop-grid"></div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" style="background:var(--cream);">
+  <div class="section-inner">
+    <div class="section-tag reveal">How We Work</div>
+    <h2 class="section-title reveal">From Seed to <em>Plantation-Ready</em></h2>
+    <p class="section-desc reveal">Our structured 9–12 month nursery programme ensures every seedling meets the highest standards of health, vigour and genetic purity.</p>
+    <div class="process-steps">
+      <div class="process-step reveal"><div class="step-circle">📦<div class="step-num">1</div></div><div class="step-title">Seed Receipt</div><div class="step-desc">Seeds verified against D/O. Damage checked within 5% tolerance. HQ audit conducted.</div></div>
+      <div class="process-step reveal delay-1"><div class="step-circle">🌱<div class="step-num">2</div></div><div class="step-title">Pre-Nursery (TSK)</div><div class="step-desc">Seeds planted in germination trays with per-tray records and empty hole counts.</div></div>
+      <div class="process-step reveal delay-2"><div class="step-circle">🌿<div class="step-num">3</div></div><div class="step-title">Main Nursery (TSB)</div><div class="step-desc">Healthy seedlings transplanted to polybags. 1st culling conducted — target &lt;10% removal.</div></div>
+      <div class="process-step reveal delay-3"><div class="step-circle">✂️<div class="step-num">4</div></div><div class="step-title">Culling & Grading</div><div class="step-desc">2nd and 3rd culling with drone imagery verification and DIA data recorded per plot.</div></div>
+      <div class="process-step reveal delay-4"><div class="step-circle">🚛<div class="step-num">5</div></div><div class="step-title">Delivery</div><div class="step-desc">Plantation-ready seedlings transferred with full SIN documentation and drone mapping.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" class="certs-bg">
+  <div class="section-inner">
+    <div class="section-tag reveal" style="background:rgba(157,216,88,.1);border-color:rgba(157,216,88,.2);color:var(--lime)">Quality & Compliance</div>
+    <h2 class="section-title reveal" style="color:#fff">Certified, Audited<br/><em style="color:var(--lime)">& Verified</em></h2>
+    <p class="section-desc reveal" style="color:rgba(255,255,255,.55)">Strict quality standards with dual-layer verification — site team plus independent HQ audit — on every single batch.</p>
+    <div class="certs-grid">
+      <div class="cert-card reveal"><div class="cert-icon">🏅</div><div class="cert-title">MPOB Licensed</div><div class="cert-desc">Full Malaysian Palm Oil Board licensing for seed nursery and distribution activities.</div></div>
+      <div class="cert-card reveal delay-1"><div class="cert-icon">✅</div><div class="cert-title">Dual-Audit Verified</div><div class="cert-desc">Every batch verified by site supervisors and independent HQ audit with photographic evidence.</div></div>
+      <div class="cert-card reveal delay-2"><div class="cert-icon">🛸</div><div class="cert-title">Drone Census</div><div class="cert-desc">Drone-based seedling counts at transplanting and culling stages for independent verification.</div></div>
+      <div class="cert-card reveal delay-3"><div class="cert-icon">📋</div><div class="cert-title">Full Traceability</div><div class="cert-desc">Digital batch records from seed receipt to transfer — tray, plot and culling data captured.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-tag reveal">Get In Touch</div>
+    <h2 class="section-title reveal">Questions? We're<br/><em>Here to Help</em></h2>
+    <div class="contact-grid">
+      <div>
+        <p class="section-desc reveal">Speak with our team about availability and delivery scheduling. We work with estates of all sizes across Sarawak.</p>
+        <div class="contact-items">
+          <div class="contact-item reveal"><div class="contact-icon">📍</div><div><strong>Our Nursery</strong><p>MJM Nursery, Mega Jutamas Sdn Bhd<br/>Sarawak, Malaysia</p></div></div>
+          <div class="contact-item reveal delay-1"><div class="contact-icon">🌐</div><div><strong>Website</strong><p>www.mjnursery.com.my</p></div></div>
+          <div class="contact-item reveal delay-2"><div class="contact-icon">✉️</div><div><strong>Email</strong><p>info@mjnursery.com.my</p></div></div>
+          <div class="contact-item reveal delay-3"><div class="contact-icon">⏰</div><div><strong>Operating Hours</strong><p>Mon – Fri: 8:00am – 5:00pm<br/>Saturday: 8:00am – 12:00pm</p></div></div>
+        </div>
+      </div>
+      <div class="contact-form-wrap reveal">
+        <h3>Send an Enquiry</h3>
+        <div class="form-grid-2">
+          <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your name"/></div>
+          <div class="form-group"><label>Company</label><input type="text" placeholder="Estate / Company"/></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com"/></div>
+        <div class="form-group"><label>Subject</label>
+          <select><option value="">-- Select topic --</option><option>Seedling Enquiry</option><option>Order Status</option><option>Technical Support</option><option>Partnership</option><option>Other</option></select>
+        </div>
+        <div class="form-group"><label>Message</label><textarea placeholder="Your message..."></textarea></div>
+        <button class="btn-submit" onclick="submitEnquiry(this)">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem">
+          <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--sprout),var(--leaf));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem">🌴</div>
+          <strong>MJM Nursery</strong>
+        </div>
+        <p>Mega Jutamas Sdn Bhd — Sarawak's trusted oil palm seedling nursery since 2009. MPOB licensed. Dual-audit verified. Plantation-ready.</p>
+      </div>
+      <div class="footer-col"><h4>Company</h4><ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#certifications">Certifications</a></li>
+        <li><a href="#process">Our Process</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Shop</h4><ul>
+        <li><a href="#shop">Oil Palm Seedlings</a></li>
+        <li><a href="#shop">Place an Order</a></li>
+        <li><a href="#shop">Enquire Now</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Support</h4><ul>
+        <li><a href="#contact">Contact Us</a></li>
+        <li><a href="#process">How It Works</a></li>
+        <li><a href="#shop">Order Online</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Mega Jutamas Sdn Bhd. All rights reserved. | mjnursery.com.my</p>
+      <a href="nursery-portal.html" class="footer-portal-link">Staff Portal</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== AUTO-GENERATE PRODUCT NAMES =====
+// Name format: Oil Palm Seedling - MMM YYYY
+// Generates 6 listings based on current and recent months
+function genProductName(offsetMonths){
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d=new Date();
+  d.setMonth(d.getMonth()+offsetMonths);
+  return`Oil Palm Seedling — ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+const PRICE=21.99;
+
+// Products — no breed shown, named by month, all same price
+const PRODUCTS=[
+  {id:1,name:genProductName(-5),img:'a',desc:'Premium oil palm seedlings raised through our rigorous 3-stage culling process. Top-quality, vigorous seedlings ready for field planting.',specs:['DxP Hybrid','MPOB Certified','3-Stage Culled'],stock:'in'},
+  {id:2,name:genProductName(-4),img:'b',desc:'High-yield oil palm seedlings with outstanding fresh fruit bunch performance. Sourced from MPOB-licensed material with dual-audit verification.',specs:['High Yield','Dual-Audit','Large FFB'],stock:'in'},
+  {id:3,name:genProductName(-3),img:'c',desc:'Plantation-grade seedlings selected for exceptional large fruit bunch production. Suited to mineral and peat soils across Sarawak.',specs:['Large Fruit Bunch','Peat Tolerant','Drone Verified'],stock:'in'},
+  {id:4,name:genProductName(-2),img:'d',desc:'Top-quality nursery seedlings with proven vigour and superior disease resistance. Full batch traceability from seed to delivery.',specs:['Disease Resistant','Full Traceability','SIN Documented'],stock:'in'},
+  {id:5,name:genProductName(-1),img:'e',desc:'Fresh batch of premium oil palm seedlings. Ideal for new plantings seeking consistent, high-quality material with documented provenance.',specs:['Premium Quality','Fresh Batch','HQ Audited'],stock:'low'},
+  {id:6,name:genProductName(0),img:'f',desc:'Latest season oil palm seedlings now available for advance booking. Secure your allocation early for optimal planting schedules.',specs:['Latest Season','Advance Booking','MPOB Licensed'],stock:'low'},
+];
+
+let cart={};
+
+function renderShop(){
+  const grid=document.getElementById('shop-grid');
+  grid.innerHTML=PRODUCTS.map(p=>{
+    const stockLabel={in:'In Stock',low:'Low Stock',out:'Out of Stock'}[p.stock];
+    const stockClass={in:'stock-in',low:'stock-low',out:'stock-out'}[p.stock];
+    return`<div class="shop-card reveal">
+      <div class="shop-img ${p.img}">🌴<div class="stock-chip ${stockClass}">${stockLabel}</div></div>
+      <div class="shop-body">
+        <div class="shop-quality-badges">
+          <div class="sqb sqb-gold">🏅 Top Quality</div>
+          <div class="sqb sqb-green">📈 High Yield</div>
+          <div class="sqb sqb-teal">🌿 Large FFB</div>
+        </div>
+        <div class="shop-name">${p.name}</div>
+        <div class="shop-desc">${p.desc}</div>
+        <div class="shop-specs">${p.specs.map(s=>`<div class="spec-tag">${s}</div>`).join('')}</div>
+        <div class="shop-footer">
+          <div class="shop-price">
+            <div class="price-label">Price per seedling</div>
+            <div class="price-value">RM ${PRICE.toFixed(2)}</div>
+            <div class="price-unit">Contact us for bulk pricing</div>
+          </div>
+          ${p.stock!=='out'
+            ?`<button class="btn-order" onclick="addToCart(${p.id})">🛒 Add to Order</button>`
+            :`<button class="btn-order" disabled>Out of Stock</button>`}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('#shop-grid .reveal').forEach(el=>observer.observe(el));
+}
+
+function addToCart(id){
+  const p=PRODUCTS.find(x=>x.id===id);if(!p||p.stock==='out')return;
+  if(cart[id])cart[id].qty+=100;
+  else cart[id]={product:p,qty:100};
+  renderCart();openCart();showToast(`Seedlings added to your order 🌱`);
+}
+function removeFromCart(id){delete cart[id];renderCart();}
+function changeQty(id,delta){
+  if(!cart[id])return;
+  cart[id].qty=Math.max(1,cart[id].qty+delta*100);renderCart();
+}
+function renderCart(){
+  const items=Object.values(cart);
+  const el=document.getElementById('cart-items');
+  const totalEl=document.getElementById('cart-total');
+  const btn=document.getElementById('btn-checkout');
+  if(!items.length){
+    el.innerHTML='<div class="cart-empty"><div class="icon">🌱</div><p>Your cart is empty.<br/>Browse our seedlings above.</p></div>';
+    totalEl.textContent='RM 0.00';btn.disabled=true;updateCartBadge(0);return;
+  }
+  let total=0,count=0;
+  el.innerHTML=items.map(({product:p,qty})=>{
+    total+=PRICE*qty;count+=qty;
+    return`<div class="cart-item">
+      <div class="cart-item-icon">🌴</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-price">RM ${PRICE.toFixed(2)} × ${qty.toLocaleString()} = <strong>RM ${(PRICE*qty).toLocaleString('en-MY',{minimumFractionDigits:2})}</strong></div>
+        <div class="cart-qty">
+          <button class="qty-btn" onclick="changeQty(${p.id},-1)">−</button>
+          <div class="qty-val">${qty.toLocaleString()}</div>
+          <button class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
+          <button class="cart-item-del" onclick="removeFromCart(${p.id})">✕ Remove</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  totalEl.textContent='RM '+total.toLocaleString('en-MY',{minimumFractionDigits:2});
+  btn.disabled=false;updateCartBadge(count);
+}
+function updateCartBadge(count){
+  const b=document.getElementById('nav-cart-badge');
+  if(!b)return;
+  if(count>0){b.textContent=count>99?'99+':count;b.style.display='inline-flex';}
+  else b.style.display='none';
+}
+function openCart(){document.getElementById('cart-overlay').classList.add('open');document.getElementById('cart-drawer').classList.add('open');}
+function closeCart(){document.getElementById('cart-overlay').classList.remove('open');document.getElementById('cart-drawer').classList.remove('open');}
+function openOrderModal(){
+  const items=Object.values(cart);if(!items.length)return;
+  let total=0;
+  const rows=items.map(({product:p,qty})=>{total+=PRICE*qty;return`<div class="order-item-row"><span>${p.name} × ${qty.toLocaleString()}</span><span>RM ${(PRICE*qty).toLocaleString('en-MY',{minimumFractionDigits:2})}</span></div>`;}).join('');
+  document.getElementById('order-summary-items').innerHTML=rows+`<div class="order-item-row"><span>Estimated Total</span><span>RM ${total.toLocaleString('en-MY',{minimumFractionDigits:2})}</span></div>`;
+  closeCart();document.getElementById('order-overlay').classList.add('open');
+}
+function closeOrderModal(){document.getElementById('order-overlay').classList.remove('open');}
+function placeOrder(){
+  const name=document.getElementById('o-name').value.trim();
+  const phone=document.getElementById('o-phone').value.trim();
+  const email=document.getElementById('o-email').value.trim();
+  const state=document.getElementById('o-state').value;
+  if(!name||!phone||!email||!state){showToast('⚠️ Please fill all required fields');return;}
+  closeOrderModal();cart={};renderCart();
+  showToast('✅ Order submitted! We\'ll contact you within 1 business day.');
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3800);}
+
+// CURSOR
+const cursor=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cursor.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cursor.classList.remove('big'));
+});
+
+// NAV scroll
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50));
+function openMobileMenu(){document.getElementById('mobile-menu').classList.add('open');}
+function closeMobileMenu(){document.getElementById('mobile-menu').classList.remove('open');}
+
+// REVEAL
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// COUNTERS
+function animateCounter(el,target){
+  const isLarge=target>10000;let start=0;
+  const timer=setInterval(()=>{
+    start=Math.min(start+target/(2000/16),target);
+    if(isLarge)el.textContent=(start/1000000).toFixed(1)+'M+';
+    else el.textContent=Math.round(start)+'+';
+    if(start>=target)clearInterval(timer);
+  },16);
+}
+const statObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animateCounter(e.target,parseInt(e.target.dataset.target));statObs.unobserve(e.target);}});},{threshold:0.5});
+document.querySelectorAll('[data-target]').forEach(el=>statObs.observe(el));
+
+// CONTACT FORM
+function submitEnquiry(btn){btn.textContent='✅ Sent! We\'ll reply within 1 business day.';btn.style.background='linear-gradient(135deg,#2d4a1a,#1a2e10)';btn.disabled=true;}
+
+// CLOSE ORDER ON OVERLAY CLICK
+document.getElementById('order-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeOrderModal();});
+
+renderShop();
+</script>
+</body>
+</html>

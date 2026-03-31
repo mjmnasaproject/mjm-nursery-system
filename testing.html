@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MJM Nursery — Staff Portal | Batch Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#1a150d;--bark:#3d2610;--earth:#5c3d1e;--moss:#2e4a1e;--leaf:#4a7a2e;--sprout:#6aa83c;--lime:#9dd458;--mist:#edf5e0;--cream:#f8f4ec;--sand:#e8dcc8;--amber:#c07820;--rust:#a83020;--sky:#3a7ab4;--teal:#1a8a6a;--white:#fdfaf4;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--sand);}::-webkit-scrollbar-thumb{background:var(--sprout);border-radius:3px;}
+
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#0d1a07 0%,#1a2e0d 40%,#2a1806 100%);position:relative;overflow:hidden;}
+.login-bg-pattern{position:absolute;inset:0;background-image:radial-gradient(circle at 2px 2px,rgba(154,212,88,0.06) 1px,transparent 0);background-size:28px 28px;}
+.login-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+.login-orb.a{width:400px;height:400px;background:rgba(74,122,46,0.2);top:-100px;left:-100px;}
+.login-orb.b{width:300px;height:300px;background:rgba(92,61,30,0.3);bottom:-80px;right:-60px;}
+.login-card{position:relative;z-index:2;background:rgba(253,250,244,0.04);backdrop-filter:blur(24px);border:1px solid rgba(154,212,88,0.15);border-radius:28px;padding:3rem 2.8rem;width:100%;max-width:440px;box-shadow:0 40px 100px rgba(0,0,0,.5);animation:cardRise .7s cubic-bezier(.22,1,.36,1) both;}
+@keyframes cardRise{from{opacity:0;transform:translateY(32px) scale(0.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+.login-logo{display:flex;align-items:center;gap:.9rem;margin-bottom:1.8rem;}
+.login-logo-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--sprout),var(--moss));display:flex;align-items:center;justify-content:center;font-size:1.6rem;box-shadow:0 4px 20px rgba(74,122,46,0.5);}
+.login-logo-text strong{display:block;font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;line-height:1;}
+.login-logo-text span{font-size:.72rem;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;}
+.login-card h2{font-family:'Cormorant Garamond',serif;font-size:2rem;color:#fff;font-weight:600;}
+.login-card>p{color:rgba(255,255,255,.4);font-size:.875rem;margin:.35rem 0 2rem;}
+.field{margin-bottom:1.3rem;}
+.field label{display:block;color:rgba(255,255,255,.5);font-size:.75rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.55rem;}
+.field input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(154,212,88,.12);border-radius:12px;padding:.9rem 1.1rem;color:#fff;font-family:'Outfit',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s,background .2s;}
+.field input:focus{border-color:var(--sprout);background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(106,168,60,.15);}
+.field input::placeholder{color:rgba(255,255,255,.2);}
+.login-hint{font-size:.76rem;color:rgba(255,255,255,.25);margin-bottom:1.8rem;padding:.7rem 1rem;background:rgba(255,255,255,.04);border-radius:8px;border-left:2px solid rgba(154,212,88,.3);}
+.btn-login{width:100%;background:linear-gradient(135deg,var(--sprout) 0%,var(--leaf) 100%);color:#fff;border:none;border-radius:12px;padding:1rem;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 24px rgba(106,168,60,.4);}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(106,168,60,.5);}
+.login-error{color:#f87171;font-size:.82rem;margin-top:.8rem;text-align:center;display:none;}
+
+/* APP SHELL */
+#app{display:none;min-height:100vh;flex-direction:column;}
+.topbar{background:var(--bark);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:60px;position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.25);}
+.topbar-brand{display:flex;align-items:center;gap:.7rem;}
+.tb-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--sprout),var(--leaf));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.tb-name strong{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:#fff;}
+.tb-name span{display:block;font-size:.62rem;color:rgba(255,255,255,.38);letter-spacing:.07em;text-transform:uppercase;line-height:1;}
+.topbar-nav{display:flex;gap:.15rem;}
+.nav-tab{background:none;border:none;color:rgba(255,255,255,.5);font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:500;padding:.42rem .85rem;border-radius:7px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:.38rem;}
+.nav-tab:hover{color:#fff;background:rgba(255,255,255,.08);}
+.nav-tab.active{color:var(--lime);background:rgba(154,212,88,.12);}
+.topbar-right{display:flex;align-items:center;gap:.7rem;}
+.user-pill{display:flex;align-items:center;gap:.5rem;color:rgba(255,255,255,.65);font-size:.8rem;}
+.user-av{width:28px;height:28px;background:linear-gradient(135deg,var(--amber),var(--rust));border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.7rem;}
+.btn-logout{background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.45);font-size:.73rem;padding:.28rem .65rem;border-radius:6px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;}
+.btn-logout:hover{border-color:rgba(255,255,255,.3);color:#fff;}
+.btn-website{background:none;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.38);font-size:.72rem;padding:.28rem .65rem;border-radius:6px;cursor:pointer;font-family:'Outfit',sans-serif;text-decoration:none;transition:all .15s;}
+.btn-website:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.7);}
+.main{flex:1;padding:1.75rem 1.5rem;max-width:1440px;margin:0 auto;width:100%;}
+.page{display:none;}
+.page.active{display:block;animation:pageIn .3s ease both;}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.page-title{margin-bottom:1.5rem;}
+.page-title h1{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--bark);line-height:1;}
+.page-title p{color:#7a6a58;font-size:.85rem;margin-top:.25rem;}
+
+/* ─── DASHBOARD GRID ─── */
+.dash-top{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem;}
+.dash-mid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.dash-bot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;}
+@media(max-width:1200px){.dash-top{grid-template-columns:repeat(2,1fr);}.dash-bot{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){.dash-top,.dash-mid,.dash-bot{grid-template-columns:1fr;}}
+
+/* STAT CARDS */
+.stat-card{background:var(--white);border-radius:16px;padding:1.2rem 1.3rem;border:1px solid var(--sand);position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(0,0,0,.08);}
+.stat-card::before{content:'';position:absolute;top:0;right:0;width:70px;height:70px;border-radius:0 16px 0 70px;opacity:.1;}
+.sc-green::before{background:var(--sprout);}
+.sc-amber::before{background:var(--amber);}
+.sc-rust::before{background:var(--rust);}
+.sc-sky::before{background:var(--sky);}
+.sc-teal::before{background:var(--teal);}
+.sc-purple::before{background:#7a4ab4;}
+.sc-split{display:flex;gap:.5rem;}
+.sc-half{flex:1;padding:.6rem .7rem;background:var(--cream);border-radius:10px;border:1px solid var(--sand);}
+.sc-half .sv{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--bark);}
+.sc-half .sl{font-size:.65rem;color:#8a7a68;text-transform:uppercase;letter-spacing:.04em;margin-top:.1rem;}
+.stat-icon{font-size:1.4rem;margin-bottom:.5rem;}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--bark);line-height:1;}
+.stat-label{font-size:.75rem;color:#8a7a68;margin-top:.2rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;}
+.stat-sub{font-size:.76rem;color:var(--sprout);margin-top:.3rem;font-weight:500;}
+.stat-sub.warn{color:var(--amber);}
+.stat-sub.danger{color:var(--rust);}
+
+/* CARD */
+.card{background:var(--white);border-radius:16px;padding:1.3rem;border:1px solid var(--sand);}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--bark);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;}
+.card-title-left{display:flex;align-items:center;gap:.4rem;}
+
+/* SCROLLABLE LIST */
+.scroll-list{overflow-y:auto;display:flex;flex-direction:column;gap:.5rem;padding-right:2px;}
+.scroll-list.fixed-h{max-height:240px;}
+.dash-card-scroll{display:flex;flex-direction:column;height:100%;}
+.dash-card-scroll .scroll-list{flex:1;min-height:0;}
+.scroll-list::-webkit-scrollbar{width:4px;}
+.scroll-list::-webkit-scrollbar-thumb{background:var(--sand);border-radius:2px;}
+
+/* ACTIVITY ITEMS */
+.act-item{display:flex;gap:.7rem;align-items:flex-start;padding:.6rem .7rem;background:var(--cream);border-radius:9px;border:1px solid var(--sand);font-size:.8rem;}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:.25rem;}
+.act-info{flex:1;}
+.act-batch{font-weight:600;color:var(--bark);}
+.act-stage{color:#8a7a68;margin-top:.08rem;}
+.act-time{font-size:.7rem;color:#aaa;white-space:nowrap;}
+
+/* BOOKING / SALES ITEMS */
+.booking-item{display:flex;gap:.8rem;align-items:center;padding:.65rem .8rem;background:var(--cream);border-radius:9px;border:1px solid var(--sand);}
+.booking-item:hover{background:var(--mist);}
+.bi-customer{font-size:.82rem;font-weight:600;color:var(--bark);flex:1;}
+.bi-sub{font-size:.72rem;color:#8a7a68;}
+.bi-qty{font-size:.82rem;font-weight:600;color:var(--leaf);}
+.bi-date{font-size:.72rem;color:#8a7a68;text-align:right;}
+.status-chip{font-size:.67rem;font-weight:700;padding:.18rem .55rem;border-radius:20px;white-space:nowrap;}
+.sc-confirmed{background:rgba(74,122,46,.1);color:var(--leaf);}
+.sc-pending{background:rgba(192,120,32,.1);color:var(--amber);}
+.sc-ready{background:rgba(26,138,106,.1);color:var(--teal);}
+.sc-collected{background:rgba(46,74,30,.1);color:var(--moss);}
+.sc-cancelled{background:rgba(168,48,32,.1);color:var(--rust);}
+
+/* INVENTORY GRID */
+.inv-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;max-height:300px;overflow-y:auto;}
+.inv-grid::-webkit-scrollbar{width:4px;}
+.inv-grid::-webkit-scrollbar-thumb{background:var(--sand);border-radius:2px;}
+.inv-item{padding:.8rem;background:var(--cream);border-radius:10px;border:1px solid var(--sand);}
+.inv-label{font-size:.72rem;color:#8a7a68;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem;}
+.inv-value{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--bark);}
+.inv-sub{font-size:.72rem;margin-top:.15rem;}
+.inv-bar{height:5px;background:var(--sand);border-radius:3px;overflow:hidden;margin-top:.4rem;}
+.inv-bar-fill{height:100%;border-radius:3px;}
+.ibf-green{background:var(--sprout);}
+.ibf-amber{background:var(--amber);}
+.ibf-teal{background:var(--teal);}
+.ibf-sky{background:var(--sky);}
+
+/* GAUGE */
+.gauge-wrap{text-align:center;padding:.3rem 0;}
+.gauge-svg{width:160px;height:88px;}
+.gauge-value{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;color:var(--bark);}
+.gauge-label{font-size:.73rem;color:#8a7a68;text-transform:uppercase;letter-spacing:.06em;}
+
+/* ─── BATCH TABLE ─── */
+.batches-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;gap:.8rem;flex-wrap:wrap;}
+.search-box{display:flex;align-items:center;gap:.5rem;background:var(--white);border:1px solid var(--sand);border-radius:9px;padding:.48rem .9rem;flex:1;max-width:300px;}
+.search-box input{border:none;background:none;font-family:'Outfit',sans-serif;font-size:.86rem;color:var(--ink);outline:none;width:100%;}
+.filter-select{background:var(--white);border:1px solid var(--sand);border-radius:9px;padding:.48rem .9rem;font-family:'Outfit',sans-serif;font-size:.83rem;color:var(--ink);outline:none;cursor:pointer;}
+.btn-add{background:linear-gradient(135deg,var(--sprout),var(--leaf));color:#fff;border:none;border-radius:9px;padding:.52rem 1.2rem;font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:all .15s;box-shadow:0 3px 10px rgba(74,122,46,.3);}
+.btn-add:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(74,122,46,.4);}
+.table-wrap{background:var(--white);border-radius:16px;border:1px solid var(--sand);overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+thead{background:var(--cream);}
+th{padding:.8rem 1rem;text-align:left;font-size:.71rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#8a7a68;border-bottom:1px solid var(--sand);white-space:nowrap;}
+td{padding:.8rem 1rem;font-size:.84rem;color:var(--ink);border-bottom:1px solid rgba(232,220,200,.5);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(237,245,224,.25);}
+.batch-id{font-weight:700;color:var(--bark);font-family:'Cormorant Garamond',serif;font-size:.98rem;}
+.stage-chip{display:inline-flex;align-items:center;font-size:.71rem;font-weight:600;padding:.26rem .62rem;border-radius:20px;white-space:nowrap;}
+.s-tsk{background:rgba(74,122,46,.1);color:var(--leaf);}
+.s-tsb{background:rgba(106,168,60,.12);color:var(--sprout);}
+.s-c1{background:rgba(192,120,32,.1);color:var(--amber);}
+.s-c2{background:rgba(192,120,32,.15);color:#a06010;}
+.s-c3{background:rgba(168,48,32,.1);color:var(--rust);}
+.s-tr{background:rgba(74,122,46,.08);color:#3a6010;}
+.s-done{background:rgba(46,74,30,.12);color:var(--moss);}
+.sbar-wrap{display:flex;align-items:center;gap:.5rem;}
+.sbar-track{width:64px;height:5px;background:var(--sand);border-radius:3px;overflow:hidden;}
+.sbar-fill{height:100%;border-radius:3px;background:var(--sprout);}
+.sbar-fill.warn{background:var(--amber);}
+.sbar-fill.bad{background:var(--rust);}
+.action-btn{background:none;border:1px solid var(--sand);border-radius:6px;padding:.26rem .62rem;font-size:.74rem;font-family:'Outfit',sans-serif;cursor:pointer;color:var(--bark);transition:all .15s;margin-right:.2rem;}
+.action-btn:hover{border-color:var(--leaf);color:var(--leaf);background:rgba(74,122,46,.05);}
+.action-btn.del:hover{border-color:var(--rust);color:var(--rust);}
+.empty-state{text-align:center;padding:3.5rem 2rem;}
+.empty-state .icon{font-size:2.5rem;margin-bottom:.8rem;}
+.empty-state h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--bark);}
+
+/* ─── MODAL ─── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,8,4,.6);z-index:500;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:20px;width:100%;max-width:980px;max-height:94vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 40px 100px rgba(0,0,0,.3);animation:modalIn .3s cubic-bezier(.22,1,.36,1) both;}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(16px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-header{background:var(--white);border-bottom:1px solid var(--sand);padding:.95rem 1.4rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.modal-header h2{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:var(--bark);}
+.modal-close{width:32px;height:32px;border-radius:50%;border:1px solid var(--sand);background:none;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;color:#8a7a68;transition:all .15s;}
+.modal-close:hover{background:var(--cream);}
+.modal-tabs{display:flex;background:var(--cream);padding:.4rem .4rem 0;gap:.15rem;overflow-x:auto;flex-shrink:0;border-bottom:2px solid var(--sand);}
+.modal-tab-btn{padding:.45rem .8rem;border:none;background:transparent;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.73rem;font-weight:600;color:#8a7a68;border-radius:6px 6px 0 0;white-space:nowrap;transition:all .15s;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.modal-tab-btn.active{color:var(--leaf);background:var(--white);border-bottom-color:var(--sprout);}
+.modal-tab-btn.saved-tab .tab-num{background:var(--leaf);color:#fff;}
+.tab-num{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--sand);color:#6a5a48;font-size:.6rem;margin-right:.28rem;}
+.modal-tab-btn.active .tab-num{background:var(--sprout);color:#fff;}
+.modal-body{flex:1;overflow-y:auto;}
+.tab-pane{display:none;padding:1.3rem 1.5rem 1rem;}
+.tab-pane.active{display:block;animation:pageIn .2s ease both;}
+.modal-footer{padding:.8rem 1.4rem;border-top:1px solid var(--sand);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--white);}
+.step-indicator{font-size:.72rem;color:#8a7a68;}
+.step-indicator strong{color:var(--leaf);}
+.tab-save-bar{display:flex;justify-content:flex-end;align-items:center;gap:.7rem;padding:.8rem 0 0;border-top:1px solid var(--sand);margin-top:1.1rem;}
+.save-status{font-size:.76rem;color:var(--sprout);opacity:0;transition:opacity .3s;}
+.save-status.show{opacity:1;}
+
+/* FORM */
+.sec-label{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--bark);margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid var(--sand);display:flex;align-items:center;gap:.4rem;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.95rem;}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem;margin-bottom:.95rem;}
+.form-group{display:flex;flex-direction:column;gap:.32rem;}
+.form-group label{font-size:.7rem;font-weight:600;color:#6a5a48;text-transform:uppercase;letter-spacing:.06em;}
+.form-group input,.form-group select,.form-group textarea{background:var(--cream);border:1.5px solid var(--sand);border-radius:8px;padding:.58rem .82rem;font-family:'Outfit',sans-serif;font-size:.86rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--sprout);box-shadow:0 0 0 3px rgba(106,168,60,.1);background:var(--white);}
+.form-group textarea{resize:vertical;min-height:72px;}
+.form-group input[readonly]{background:var(--mist);color:var(--moss);font-weight:600;cursor:default;}
+.req{color:var(--rust);}
+.stage-sec{background:var(--cream);border-radius:11px;padding:1rem;border:1px solid var(--sand);margin-bottom:.95rem;}
+.stage-sec-title{font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--earth);margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between;}
+.data-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+.data-table th{background:var(--sand);padding:.45rem .62rem;text-align:left;font-weight:600;font-size:.69rem;text-transform:uppercase;letter-spacing:.05em;color:#6a5a48;white-space:nowrap;}
+.data-table td{padding:.4rem .62rem;border-bottom:1px solid rgba(232,220,200,.6);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table input,.data-table select{background:var(--white);border:1px solid var(--sand);border-radius:5px;padding:.28rem .48rem;font-size:.79rem;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;width:100%;}
+.data-table input[type=number]{text-align:center;}
+.data-table input:focus,.data-table select:focus{border-color:var(--sprout);}
+.data-table input[readonly]{background:var(--mist);color:var(--moss);font-weight:600;text-align:center;}
+.w60{width:60px;}.w80{width:80px;}.w100{width:100px;}.w120{width:120px;}
+.btn-add-row{width:100%;background:transparent;border:1px dashed var(--sand);border-radius:6px;padding:.4rem;font-family:'Outfit',sans-serif;font-size:.76rem;color:#8a7a68;cursor:pointer;margin-top:.35rem;transition:all .15s;}
+.btn-add-row:hover{border-color:var(--sprout);color:var(--leaf);}
+.summary-bar{display:flex;gap:.9rem;background:linear-gradient(135deg,var(--moss),var(--bark));color:#fff;padding:.8rem 1rem;border-radius:10px;margin-top:.75rem;flex-wrap:wrap;}
+.summary-item label{display:block;font-size:.62rem;opacity:.7;text-transform:uppercase;letter-spacing:.05em;}
+.summary-item span{font-size:1.1rem;font-weight:700;font-family:'Cormorant Garamond',serif;}
+.summary-item.sep{border-left:1px solid rgba(255,255,255,.2);padding-left:.9rem;}
+.btn-save{background:linear-gradient(135deg,var(--sprout),var(--leaf));color:#fff;border:none;border-radius:8px;padding:.55rem 1.3rem;font-family:'Outfit',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;box-shadow:0 3px 10px rgba(74,122,46,.3);transition:all .15s;}
+.btn-save:hover{transform:translateY(-1px);}
+.btn-cancel{background:none;border:1.5px solid var(--sand);color:#6a5a48;border-radius:8px;padding:.55rem 1rem;font-family:'Outfit',sans-serif;font-size:.84rem;cursor:pointer;transition:all .15s;}
+.btn-cancel:hover{border-color:var(--earth);}
+.btn-next{background:var(--mist);border:1.5px solid var(--sprout);color:var(--leaf);border-radius:8px;padding:.55rem 1rem;font-family:'Outfit',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;transition:all .15s;}
+.btn-next:hover{background:var(--sprout);color:#fff;}
+.btn-prev{background:none;border:1.5px solid var(--sand);color:#6a5a48;border-radius:8px;padding:.55rem .85rem;font-family:'Outfit',sans-serif;font-size:.84rem;cursor:pointer;transition:all .15s;}
+.btn-tab-save{background:var(--mist);border:1.5px solid var(--sprout);color:var(--leaf);border-radius:8px;padding:.5rem 1.2rem;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:.35rem;}
+.btn-tab-save:hover{background:var(--sprout);color:#fff;}
+.btn-sm{background:none;border:1px solid var(--sand);border-radius:5px;padding:.22rem .55rem;font-size:.71rem;cursor:pointer;font-family:'Outfit',sans-serif;color:#6a5a48;transition:all .15s;}
+.btn-sm:hover{border-color:var(--sprout);color:var(--leaf);}
+.btn-sm.red:hover{border-color:var(--rust);color:var(--rust);}
+
+/* REPORTS */
+.inner-tabs{display:flex;gap:.15rem;border-bottom:1px solid var(--sand);margin-bottom:1.3rem;}
+.inner-tab{background:none;border:none;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:500;padding:.55rem .95rem .65rem;cursor:pointer;color:#8a7a68;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.inner-tab.active{color:var(--leaf);border-bottom-color:var(--sprout);}
+.report-section-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--bark);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.stage-breakdown-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+@media(max-width:900px){.stage-breakdown-grid{grid-template-columns:1fr 1fr;}}
+.sb-card{background:var(--white);border-radius:14px;border:1px solid var(--sand);overflow:hidden;}
+.sb-card-head{padding:.75rem 1rem;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff;}
+.sbh-green{background:linear-gradient(135deg,var(--leaf),var(--moss));}
+.sbh-amber{background:linear-gradient(135deg,var(--amber),#7a4a10);}
+.sbh-teal{background:linear-gradient(135deg,var(--teal),#0a5a42);}
+.sb-card-body{padding:.9rem 1rem;}
+.sb-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid rgba(232,220,200,.5);font-size:.82rem;}
+.sb-row:last-child{border-bottom:none;}
+.sb-row-label{color:#6a5a48;}
+.sb-row-val{font-weight:700;color:var(--bark);font-family:'Cormorant Garamond',serif;font-size:1rem;}
+.sb-row-val.green{color:var(--leaf);}
+.sb-row-val.amber{color:var(--amber);}
+.sb-row-val.teal{color:var(--teal);}
+.culling-progress{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.5rem;}
+.cp-batch{display:flex;align-items:center;gap:.8rem;padding:.65rem .9rem;background:var(--white);border-radius:10px;border:1px solid var(--sand);}
+.cp-id{font-weight:700;color:var(--bark);font-family:'Cormorant Garamond',serif;font-size:.95rem;min-width:110px;}
+.cp-stages{display:flex;gap:.35rem;flex:1;}
+.cp-stage{font-size:.68rem;font-weight:700;padding:.2rem .55rem;border-radius:20px;}
+.cps-done{background:rgba(74,122,46,.12);color:var(--leaf);}
+.cps-active{background:rgba(192,120,32,.12);color:var(--amber);}
+.cps-pending{background:rgba(0,0,0,.05);color:#aaa;}
+.cp-surv{font-size:.78rem;font-weight:600;color:var(--leaf);min-width:50px;text-align:right;}
+
+/* DETAIL MODAL */
+.detail-header{background:linear-gradient(135deg,var(--bark),var(--moss));border-radius:12px;padding:1.3rem;margin-bottom:1.1rem;color:#fff;}
+.detail-header h2{font-family:'Cormorant Garamond',serif;font-size:1.7rem;}
+.detail-meta{display:flex;gap:1.1rem;margin-top:.6rem;flex-wrap:wrap;}
+.detail-meta-item{font-size:.78rem;opacity:.7;}
+.detail-meta-item strong{display:block;font-size:.9rem;opacity:1;font-weight:600;}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.85rem;margin-bottom:1.2rem;}
+.detail-stat{background:var(--white);border-radius:11px;padding:.9rem;border:1px solid var(--sand);}
+.detail-stat .val{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--bark);}
+.detail-stat .lbl{font-size:.7rem;color:#8a7a68;text-transform:uppercase;letter-spacing:.05em;margin-top:.12rem;}
+.detail-stat .sub{font-size:.74rem;color:var(--sprout);margin-top:.18rem;}
+.alert{padding:.7rem .95rem;border-radius:8px;font-size:.8rem;margin-bottom:.65rem;display:flex;align-items:flex-start;gap:.55rem;}
+.alert.warn{background:rgba(192,120,32,.1);border:1px solid rgba(192,120,32,.25);color:#7a4a10;}
+.alert.danger{background:rgba(168,48,32,.1);border:1px solid rgba(168,48,32,.25);color:#7a1810;}
+.alert.success{background:rgba(74,122,46,.08);border:1px solid rgba(74,122,46,.2);color:#2a5010;}
+.tag{display:inline-flex;align-items:center;gap:.28rem;font-size:.68rem;font-weight:600;padding:.18rem .48rem;border-radius:20px;background:var(--sand);color:var(--earth);}
+.treatment-list{display:flex;flex-direction:column;gap:.45rem;}
+.treatment-item{display:flex;align-items:center;gap:.75rem;padding:.6rem .85rem;background:var(--cream);border-radius:8px;border:1px solid var(--sand);}
+.ti-date{font-size:.73rem;color:#8a7a68;min-width:76px;}
+
+/* DOWNLOAD BTN */
+.btn-dl{background:none;border:1px solid var(--sky);color:var(--sky);border-radius:7px;padding:.28rem .7rem;font-size:.74rem;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:.3rem;}
+.btn-dl:hover{background:var(--sky);color:#fff;}
+.dl-menu{position:relative;display:inline-block;}
+.dl-dropdown{position:absolute;right:0;top:110%;background:var(--white);border:1px solid var(--sand);border-radius:10px;min-width:200px;box-shadow:0 8px 32px rgba(0,0,0,.12);z-index:100;display:none;overflow:hidden;}
+.dl-dropdown.open{display:block;}
+.dl-item{padding:.65rem 1rem;font-size:.82rem;cursor:pointer;transition:background .15s;color:var(--ink);}
+.dl-item:hover{background:var(--mist);}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--bark);color:#fff;padding:.75rem 1.2rem;border-radius:10px;font-size:.84rem;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,.3);transform:translateY(100px);opacity:0;transition:all .3s cubic-bezier(.22,1,.36,1);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-left:3px solid var(--sprout);}
+.toast.error{border-left:3px solid var(--rust);}
+
+/* SALES MODAL */
+.sales-modal{max-width:600px;}
+.revenue-chart{display:flex;align-items:flex-end;gap:.4rem;height:80px;padding:.5rem 0;}
+.rev-bar{flex:1;background:linear-gradient(180deg,var(--sprout),var(--leaf));border-radius:4px 4px 0 0;min-height:4px;transition:height .5s;}
+.rev-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;gap:.3rem;}
+.rev-label{font-size:.62rem;color:#8a7a68;}
+.rev-amount{font-size:.65rem;color:var(--leaf);font-weight:600;}
+
+@media(max-width:720px){.fg,.fg3{grid-template-columns:1fr;}.modal-tabs{gap:.08rem;}.modal-tab-btn{padding:.38rem .55rem;font-size:.68rem;}.topbar-nav .nav-tab span{display:none;}.stage-breakdown-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-bg-pattern"></div>
+  <div class="login-orb a"></div><div class="login-orb b"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🌴</div>
+      <div class="login-logo-text"><strong>MJM Nursery</strong><span>Mega Jutamas Sdn Bhd</span></div>
+    </div>
+    <h2>Admin Portal</h2>
+    <p>Sign in to manage your batch records</p>
+    <div class="field"><label>Username</label><input type="text" id="login-user" placeholder="Enter username"/></div>
+    <div class="field"><label>Password</label><input type="password" id="login-pass" placeholder="Enter password"/></div>
+    <div class="login-hint">🔑 Demo: <strong>admin</strong> / <strong>nursery2024</strong></div>
+    <button class="btn-login" onclick="doLogin()">Sign In</button>
+    <div class="login-error" id="login-error">⚠ Invalid credentials.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <nav class="topbar">
+    <div class="topbar-brand">
+      <div class="tb-icon">🌴</div>
+      <div class="tb-name"><strong>MJM Nursery</strong><span>Batch Management</span></div>
+    </div>
+    <div class="topbar-nav">
+      <button class="nav-tab active" onclick="showPage('dashboard',this)">📊 <span>Dashboard</span></button>
+      <button class="nav-tab" onclick="showPage('batches',this)">🌱 <span>Batches</span></button>
+      <button class="nav-tab" onclick="showPage('sales',this)">💰 <span>Sales</span></button>
+      <button class="nav-tab" onclick="showPage('reports',this)">📋 <span>Reports</span></button>
+    </div>
+    <div class="topbar-right">
+      <a href="mjnursery-website.html" class="btn-website">← Public Site</a>
+      <div class="user-pill"><div class="user-av">A</div><span>Admin</span></div>
+      <button class="btn-logout" onclick="doLogout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <!-- ══════════════ DASHBOARD ══════════════ -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title"><h1>Nursery Dashboard</h1><p id="dash-date"></p></div>
+
+      <!-- ROW 1: Batch counts -->
+      <div class="dash-top" id="dash-row1"></div>
+      <!-- ROW 2: Nursery quantities + sales + bookings -->
+      <div class="dash-top" id="dash-row2"></div>
+
+      <!-- ROW 3: Upcoming bookings + inventory + gauge + activity -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;align-items:stretch;" id="dash-mid-grid">
+        <!-- Upcoming bookings -->
+        <div class="card" style="display:flex;flex-direction:column;">
+          <div class="card-title" style="flex-shrink:0">
+            <div class="card-title-left"><span>📅</span> Upcoming Sales & Bookings</div>
+            <button class="btn-sm" onclick="showPage('sales',document.querySelector('.nav-tab:nth-child(3)'))">View All</button>
+          </div>
+          <div class="scroll-list fixed-h" id="dash-bookings" style="flex:1;min-height:0;"></div>
+        </div>
+        <!-- Inventory -->
+        <div class="card" style="display:flex;flex-direction:column;">
+          <div class="card-title" style="flex-shrink:0;display:flex;align-items:center;justify-content:space-between;">
+            <div class="card-title-left"><span>🏪</span> Store Inventory</div>
+            <button class="btn-sm" onclick="openInventoryModal()" style="font-size:.7rem">+ Update Stock</button>
+          </div>
+          <div id="dash-inventory" style="flex:1;min-height:0;overflow-y:auto;"></div>
+        </div>
+        <!-- Gauge + recent activity -->
+        <div>
+          <div class="card" style="margin-bottom:1.1rem">
+            <div class="card-title"><div class="card-title-left"><span>🎯</span> Survival Rate</div></div>
+            <div class="gauge-wrap">
+              <svg class="gauge-svg" viewBox="0 0 200 110"><path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="#e8dcc8" stroke-width="14" stroke-linecap="round"/><path id="gauge-path" d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="url(#gg)" stroke-width="14" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251"/><defs><linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4a7a2e"/><stop offset="100%" stop-color="#9dd458"/></linearGradient></defs></svg>
+              <div class="gauge-value" id="gauge-val">—</div>
+              <div class="gauge-label">Overall Survival Rate</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"><div class="card-title-left"><span>📝</span> Recent Activity</div></div>
+            <div class="activity-list scroll-list fixed-h" id="activity-list" style="max-height:140px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 4: Milestones (30 latest) -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left"><span>⏰</span> Latest 30 Batch Activities & Milestones</div>
+          <span style="font-size:.72rem;color:#8a7a68">Scroll to see more</span>
+        </div>
+        <div class="scroll-list fixed-h" id="milestone-list" style="max-height:240px;"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════ BATCHES ══════════════ -->
+    <div class="page" id="page-batches">
+      <div class="batches-toolbar">
+        <div class="page-title" style="margin-bottom:0"><h1>Batch Records</h1><p>All oil palm seedling batches</p></div>
+        <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;">
+          <div class="search-box"><span>🔍</span><input type="text" placeholder="Search..." id="batch-search" oninput="renderBatchTable()"/></div>
+          <select class="filter-select" id="stage-filter" onchange="renderBatchTable()">
+            <option value="">All Stages</option>
+            <option>TSK</option><option>TSB</option><option value="Culling 1">1st Culling</option>
+            <option value="Culling 2">2nd Culling</option><option value="Culling 3">3rd Culling</option>
+            <option>Transfer</option><option>Complete</option>
+          </select>
+          <button class="btn-add" onclick="openAddModal()">+ New Batch</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Batch No.</th><th>Seed Brand / Supplier</th><th>Date Planted</th><th>Seeds Qty</th><th>Stage</th><th>Survival</th><th>Transfer Date</th><th>Maturity Date</th><th>Actions</th></tr></thead>
+          <tbody id="batch-tbody"></tbody>
+        </table>
+        <div class="empty-state" id="batch-empty" style="display:none"><div class="icon">🌱</div><h3>No batches found</h3></div>
+      </div>
+    </div>
+
+    <!-- ══════════════ SALES ══════════════ -->
+    <div class="page" id="page-sales">
+      <div class="page-title"><h1>Sales & Bookings</h1><p>Orders, bookings and revenue tracking</p></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;" id="sales-stats"></div>
+      <!-- Weekly Revenue Chart -->
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="card-title"><div class="card-title-left"><span>📈</span> Weekly Revenue (RM)</div><button class="btn-sm" onclick="openSaleModal()">+ Record Sale</button></div>
+        <div id="revenue-chart-wrap"></div>
+      </div>
+      <!-- Bookings table -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left"><span>📋</span> All Bookings & Orders</div>
+          <div style="display:flex;gap:.5rem">
+            <select class="filter-select" id="booking-filter" onchange="renderBookingsTable()" style="padding:.3rem .6rem;font-size:.78rem">
+              <option value="">All Status</option>
+              <option>Confirmed</option><option>Pending</option><option>Ready</option><option>Collected</option><option>Cancelled</option>
+            </select>
+            <button class="btn-add" onclick="openSaleModal()" style="padding:.35rem .9rem;font-size:.8rem">+ New</button>
+          </div>
+        </div>
+        <div class="table-wrap" style="border-radius:12px;border:none;">
+          <table>
+            <thead><tr><th>Order No.</th><th>Customer</th><th>Variety</th><th>Qty</th><th>Unit Price</th><th>Total</th><th>Collection Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="bookings-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ REPORTS ══════════════ -->
+    <div class="page" id="page-reports">
+      <div class="page-title"><h1>Summary Reports</h1><p>Stage breakdown, culling progress, batch performance</p></div>
+      <div class="inner-tabs">
+        <button class="inner-tab active" onclick="showInnerTab('rt-summary',this)">Summary</button>
+        <button class="inner-tab" onclick="showInnerTab('rt-stages',this)">Growth Stage Breakdown</button>
+        <button class="inner-tab" onclick="showInnerTab('rt-culling',this)">Culling Rates</button>
+        <button class="inner-tab" onclick="showInnerTab('rt-treatment',this)">Treatment Log</button>
+      </div>
+      <div id="rt-summary"></div>
+      <div id="rt-stages" style="display:none"></div>
+      <div id="rt-culling" style="display:none"></div>
+      <div id="rt-treatment" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ BATCH MODAL ══════════════ -->
+<div class="modal-overlay" id="batch-modal">
+  <div class="modal">
+    <div class="modal-header"><h2 id="modal-title">New Batch</h2><div style="display:flex;align-items:center;gap:.8rem"><span id="modal-save-time" style="font-size:.7rem;color:#aaa"></span><button class="modal-close" onclick="closeModal()">✕</button></div></div>
+    <div class="modal-tabs">
+      <button class="modal-tab-btn active" onclick="goTab(0)" id="mtab-0"><span class="tab-num">1</span>Batch Info</button>
+      <button class="modal-tab-btn" onclick="goTab(1)" id="mtab-1"><span class="tab-num">2</span>Tray Planting</button>
+      <button class="modal-tab-btn" onclick="goTab(2)" id="mtab-2"><span class="tab-num">3</span>Transplanting</button>
+      <button class="modal-tab-btn" onclick="goTab(3)" id="mtab-3"><span class="tab-num">4</span>1st Culling</button>
+      <button class="modal-tab-btn" onclick="goTab(4)" id="mtab-4"><span class="tab-num">5</span>2nd Culling</button>
+      <button class="modal-tab-btn" onclick="goTab(5)" id="mtab-5"><span class="tab-num">6</span>3rd Culling</button>
+      <button class="modal-tab-btn" onclick="goTab(6)" id="mtab-6"><span class="tab-num">7</span>Transfer</button>
+      <button class="modal-tab-btn" onclick="goTab(7)" id="mtab-7"><span class="tab-num">8</span>Rainfall & Notes</button>
+    </div>
+    <div class="modal-body">
+      <!-- TAB 1 -->
+      <div class="tab-pane active" id="mpane-0">
+        <div class="sec-label">🌱 Batch Identification</div>
+        <div class="fg">
+          <div class="form-group"><label>Batch Number <span class="req">*</span></label><input type="text" id="f-batchno" readonly/></div>
+          <div class="form-group"><label>Tray Number</label><input type="text" id="f-lotno" placeholder="e.g. T-001"/></div>
+          <div class="form-group"><label>Seed Brand <span class="req">*</span></label>
+            <select id="f-brand"><option value="">-- Select Brand --</option><option>Felda ATH</option><option>Dami Mas</option><option>MPOB Clone</option><option>Sindora</option><option>AA Hybrid IS</option><option>Felda Yangambi DxP</option><option>IOI DxP Hybrid</option><option>UPB Premier Hybrid</option><option>GH500</option><option>Sawit Kinabalu DxP</option><option>Surea DxP</option><option>Calix 600</option></select>
+          </div>
+          <div class="form-group"><label>Seed Supplier <span class="req">*</span></label>
+            <select id="f-supplier"><option value="">-- Select Supplier --</option><option>FELDA Seeds Sdn Bhd</option><option>Dami Mas Sdn Bhd</option><option>MPOB Seeds</option><option>Sindora Seeds</option><option>Inai Utama Sdn Bhd (AAR)</option><option>Tunas Services Enterprise (United Plantation)</option><option>Tunas Services Enterprise (Felda Agricultural)</option><option>Sawit Kinabalu Seeds Sdn Bhd</option><option>Sime Darby Plantation Seeds &amp; Agricultural Services Sdn Bhd</option><option>United Plantations Berhad</option><option>IOI Plantation Sdn Bhd</option></select>
+          </div>
+        </div>
+        <div class="sec-label">📦 Quantity & Dates</div>
+        <div class="fg">
+          <div class="form-group"><label>Seeds in D/O</label><input type="number" id="f-doqty" placeholder="0" oninput="calcFOC()"/></div>
+          <div class="form-group"><label>FOC % from Supplier</label>
+            <select id="f-focpct" onchange="calcFOC()"><option value="0">0%</option><option value="5">5%</option><option value="6">6%</option><option value="7">7%</option></select>
+          </div>
+          <div class="form-group"><label>FOC Qty <span style="font-size:.62rem;color:var(--sprout);text-transform:none">(auto)</span></label><input type="number" id="f-focqty" readonly/></div>
+          <div class="form-group"><label>Seed Damage Qty</label><input type="number" id="f-dmgsite" placeholder="0" oninput="calcFOC()"/></div>
+          <div class="form-group"><label>Actual Seeds Received <span style="font-size:.62rem;color:var(--sprout);text-transform:none">(D/O + FOC − Damage, auto)</span></label><input type="number" id="f-received" readonly/></div>
+          <div class="form-group"><label>Actual Receive Rate <span style="font-size:.62rem;color:var(--sprout);text-transform:none">(received÷(D/O+FOC), must >95%)</span></label><input type="text" id="f-receivedrate" readonly/></div>
+          <div class="form-group"><label>No. of Workers</label><input type="number" id="f-workers" placeholder="0"/></div>
+          <div class="form-group"><label>Date Seeds Received <span class="req">*</span></label><input type="date" id="f-datereceived"/></div>
+          <div class="form-group"><label>Date Planted (TSK) <span class="req">*</span></label><input type="date" id="f-dateplanted" oninput="calcDates()"/></div>
+          <div class="form-group"><label>Transfer Date <span style="font-size:.62rem;color:var(--sprout);text-transform:none">(planted +3mo, auto)</span></label><input type="date" id="f-transferdate" readonly/></div>
+          <div class="form-group"><label>Maturity Date <span style="font-size:.62rem;color:var(--sprout);text-transform:none">(planted +10mo, auto)</span></label><input type="date" id="f-maturitydate" readonly/></div>
+          <div class="form-group"><label>Current Stage</label>
+            <select id="f-stage"><option value="TSK">TSK — Pre-Nursery</option><option value="TSB">TSB — Main Nursery</option><option value="Culling 1">1st Culling</option><option value="Culling 2">2nd Culling</option><option value="Culling 3">3rd Culling</option><option value="Transfer">Transfer</option><option value="Complete">Complete</option></select>
+          </div>
+        </div>
+        <div class="tab-save-bar">
+          <span class="save-status" id="save-status-0">✅ Saved</span>
+          <button class="btn-tab-save" onclick="saveTab(0)">💾 Save Batch Info</button>
+        </div>
+      </div>
+      <!-- TAB 2 -->
+      <div class="tab-pane" id="mpane-1">
+        <div class="sec-label">📦 Tray Planting — Pre Nursery (TSK)</div>
+        <div class="stage-sec">
+          <div class="stage-sec-title"><span>🌱 Per-Tray Breakdown</span><button class="btn-sm" onclick="addTrayRow()">+ Add Tray</button></div>
+          <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Tray No.</th><th>Type</th><th>Seeds Planted (a)</th><th>Empty Holes (b)</th><th>Actual (a−b)</th><th></th></tr></thead><tbody id="tray-tbody"></tbody></table></div>
+        </div>
+        <div class="sec-label">🔍 Seed Damage & Planted Rates</div>
+        <div class="fg3">
+          <div class="form-group"><label>Damaged — HQ Audit</label><input type="number" id="f-dmghq" placeholder="0"/></div>
+          <div class="form-group"><label>Damage Rate % <span style="font-size:.62rem;color:var(--sprout);text-transform:none">(auto, target &lt;5%)</span></label><input type="text" id="f-dmgrate" readonly/></div>
+          <div class="form-group"><label>HQ Verification Code</label><input type="text" id="f-hqverify"/></div>
+        </div>
+        <div class="fg" style="margin-top:.2rem">
+          <div class="form-group"><label>Actual Seed Planted Rate <span style="font-size:.62rem;color:var(--sprout);text-transform:none">(actual planted ÷ received, must &gt;95%)</span></label><input type="text" id="f-plantedrate" readonly/></div>
+          <div class="form-group"><label>Actual Receive Rate <span style="font-size:.62rem;color:var(--sprout);text-transform:none">(from Tab 1)</span></label><input type="text" id="f-receivedrate2" readonly style="font-size:.82rem"/></div>
+        </div>
+        <div class="summary-bar">
+          <div class="summary-item"><label>Total Planted</label><span id="sum-tsk-planted">0</span></div>
+          <div class="summary-item"><label>Empty Holes</label><span id="sum-tsk-empty">0</span></div>
+          <div class="summary-item"><label>Actual Planted</label><span id="sum-tsk-actual">0</span></div>
+          <div class="summary-item sep"><label>Damage Rate</label><span id="sum-tsk-dmgrate">0.00%</span></div>
+        </div>
+        <div class="tab-save-bar"><span class="save-status" id="save-status-1">✅ Saved</span><button class="btn-tab-save" onclick="saveTab(1)">💾 Save Tray Planting</button></div>
+      </div>
+      <!-- TAB 3 -->
+      <div class="tab-pane" id="mpane-2">
+        <div class="sec-label">🌿 Transplanting — TSK → Main Nursery (TSB)</div>
+        <div class="stage-sec">
+          <div class="stage-sec-title"><span>📋 Plot-by-Plot</span><button class="btn-sm" onclick="addTpRow()">+ Add Plot</button></div>
+          <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Tray</th><th>Plot ID</th><th>Date</th><th>Biasa (n)</th><th>PDT (p)</th><th>ICU</th><th>SIN No.</th><th>Drone</th><th></th></tr></thead><tbody id="tp-tbody"></tbody></table></div>
+        </div>
+        <div class="summary-bar">
+          <div class="summary-item"><label>Total Biasa</label><span id="sum-tp-norm">0</span></div>
+          <div class="summary-item"><label>Total PDT</label><span id="sum-tp-pdt">0</span></div>
+          <div class="summary-item"><label>Total ICU</label><span id="sum-tp-icu">0</span></div>
+          <div class="summary-item"><label>Grand Total</label><span id="sum-tp-grand">0</span></div>
+          <div class="summary-item sep"><label>Trans. Rate</label><span id="sum-tp-rate">0%</span></div>
+          <div class="summary-item sep"><label>Balance in TSK</label><span id="sum-tp-bal">0</span></div>
+        </div>
+        <div class="tab-save-bar"><span class="save-status" id="save-status-2">✅ Saved</span><button class="btn-tab-save" onclick="saveTab(2)">💾 Save Transplanting</button></div>
+      </div>
+      <!-- TAB 4 -->
+      <div class="tab-pane" id="mpane-3">
+        <div class="sec-label" style="border-left:4px solid var(--amber);padding-left:.7rem;">✂️ 1st Culling Report</div>
+        <div class="stage-sec" style="border-left:3px solid var(--amber);">
+          <div class="stage-sec-title"><span>Per Tray</span><button class="btn-sm" onclick="addCull1Row()">+ Add</button></div>
+          <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Tray No.</th><th>Culled Qty</th><th>Rate (%)</th><th>Date</th><th></th></tr></thead><tbody id="cull1-tbody"></tbody></table></div>
+        </div>
+        <div class="summary-bar" style="background:linear-gradient(135deg,#7a4a10,#3d2610);">
+          <div class="summary-item"><label>Total Culled</label><span id="sum-c1-total">0</span></div>
+          <div class="summary-item"><label>Cull Rate</label><span id="sum-c1-rate">0%</span></div>
+          <div class="summary-item sep"><label>Remaining</label><span id="sum-c1-remain">0</span></div>
+        </div>
+        <div class="tab-save-bar"><span class="save-status" id="save-status-3">✅ Saved</span><button class="btn-tab-save" onclick="saveTab(3)">💾 Save 1st Culling</button></div>
+      </div>
+      <!-- TAB 5 -->
+      <div class="tab-pane" id="mpane-4">
+        <div class="sec-label" style="border-left:4px solid #e06020;padding-left:.7rem;">✂️ 2nd Culling Report</div>
+        <div class="stage-sec" style="border-left:3px solid #e06020;">
+          <div class="stage-sec-title"><span>By Plot</span><button class="btn-sm" onclick="syncPlotsToCull2()">🔄 Sync Plots</button></div>
+          <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Date</th><th>Plot ID</th><th>Total Seedlings</th><th>Dead Qty</th><th>Balance (auto)</th><th>Culling Rate %</th><th></th></tr></thead><tbody id="cull2-tbody"></tbody></table></div>
+          <button class="btn-add-row" onclick="addCull2Row()">+ Add Row Manually</button>
+        </div>
+        <div class="summary-bar" style="background:linear-gradient(135deg,#8a4010,#3d2610);">
+          <div class="summary-item"><label>Total Dead</label><span id="sum-c2-total">0</span></div>
+          <div class="summary-item"><label>Culling Rate</label><span id="sum-c2-rate">0%</span></div>
+          <div class="summary-item sep"><label>Total Balance</label><span id="sum-c2-balance">0</span></div>
+        </div>
+        <div class="tab-save-bar"><span class="save-status" id="save-status-4">✅ Saved</span><button class="btn-tab-save" onclick="saveTab(4)">💾 Save 2nd Culling</button></div>
+      </div>
+      <!-- TAB 6 -->
+      <div class="tab-pane" id="mpane-5">
+        <div class="sec-label" style="border-left:4px solid var(--rust);padding-left:.7rem;">✂️ 3rd Culling Report</div>
+        <div class="stage-sec" style="border-left:3px solid var(--rust);">
+          <div class="stage-sec-title"><span>By Plot</span><button class="btn-sm" onclick="syncPlotsToCull3()">🔄 Sync Plots</button></div>
+          <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Date</th><th>Plot</th><th>Total Seedlings</th><th>Balance</th><th>DIA Drone Count</th><th>Rate/Plot (auto)</th><th>Rate/Batch (auto)</th><th></th></tr></thead><tbody id="cull3-tbody"></tbody></table></div>
+          <button class="btn-add-row" onclick="addCull3Row()">+ Add Row Manually</button>
+        </div>
+        <div class="summary-bar" style="background:linear-gradient(135deg,#7a1810,#3d2610);">
+          <div class="summary-item"><label>Total Culled</label><span id="sum-c3-total">0</span></div>
+          <div class="summary-item"><label>Rate/Batch</label><span id="sum-c3-rate">0%</span></div>
+          <div class="summary-item sep"><label>Remaining</label><span id="sum-c3-remain">0</span></div>
+        </div>
+        <div class="tab-save-bar"><span class="save-status" id="save-status-5">✅ Saved</span><button class="btn-tab-save" onclick="saveTab(5)">💾 Save 3rd Culling</button></div>
+      </div>
+      <!-- TAB 7 -->
+      <div class="tab-pane" id="mpane-6">
+        <div class="sec-label">🚛 Transfer to Plot-R / MJM Store</div>
+        <div class="stage-sec">
+          <div class="stage-sec-title"><span>Transfer Records</span><button class="btn-sm" onclick="addTransferRow()">+ Add</button></div>
+          <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>From Plot</th><th>To Plot-R / Store</th><th>Qty</th><th>Date</th><th>SIN No.</th><th>Drone</th><th></th></tr></thead><tbody id="transfer-tbody"></tbody></table></div>
+        </div>
+        <div class="summary-bar">
+          <div class="summary-item"><label>Total Transferred</label><span id="sum-tr-total">0</span></div>
+          <div class="summary-item"><label>Transfer Rate</label><span id="sum-tr-rate">0%</span></div>
+        </div>
+        <div class="tab-save-bar"><span class="save-status" id="save-status-6">✅ Saved</span><button class="btn-tab-save" onclick="saveTab(6)">💾 Save Transfer</button></div>
+      </div>
+      <!-- TAB 8 -->
+      <div class="tab-pane" id="mpane-7">
+        <div class="sec-label">🌧️ Monthly Rainfall Log (mm)</div>
+        <div class="fg3">
+          <div class="form-group"><label>Month 1</label><input type="number" id="f-rain1" placeholder="0"/></div>
+          <div class="form-group"><label>Month 2</label><input type="number" id="f-rain2" placeholder="0"/></div>
+          <div class="form-group"><label>Month 3</label><input type="number" id="f-rain3" placeholder="0"/></div>
+        </div>
+        <div class="sec-label">📝 Notes & Remarks</div>
+        <div class="form-group"><textarea id="f-notes" placeholder="Observations, issues, remarks..." style="min-height:100px"></textarea></div>
+        <div class="tab-save-bar">
+          <span class="save-status" id="save-status-7">✅ Saved</span>
+          <button class="btn-tab-save" onclick="saveTab(7)">💾 Save Notes</button>
+          <button class="btn-save" onclick="saveBatch()" style="margin-left:.4rem">💾 Save All & Close</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="step-indicator">Tab <strong id="step-cur">1</strong> of <strong>8</strong></div>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn-prev" id="btn-prev" onclick="prevTab()" style="display:none">← Back</button>
+        <button class="btn-cancel" onclick="closeModal()">Close</button>
+        <button class="btn-next" id="btn-next" onclick="nextTab()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="detail-title">Batch Detail</h2>
+      <div style="display:flex;gap:.5rem;align-items:center;">
+        <div class="dl-menu" id="dl-menu">
+          <button class="btn-dl" onclick="toggleDlMenu()">⬇ Download ▾</button>
+          <div class="dl-dropdown" id="dl-dropdown">
+            <div class="dl-item" onclick="downloadReport('full')">📄 Full Batch Report</div>
+            <div class="dl-item" onclick="downloadReport('tray')">🌱 Tray Planting Report</div>
+            <div class="dl-item" onclick="downloadReport('transplant')">🌿 Transplanting Report</div>
+            <div class="dl-item" onclick="downloadReport('cull1')">✂️ 1st Culling Report</div>
+            <div class="dl-item" onclick="downloadReport('cull2')">✂️ 2nd Culling Report</div>
+            <div class="dl-item" onclick="downloadReport('cull3')">✂️ 3rd Culling Report</div>
+            <div class="dl-item" onclick="downloadReport('transfer')">🚛 Transfer Report</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeDetailModal()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="detail-body" style="padding:1.3rem 1.5rem;overflow-y:auto"></div>
+    <div class="modal-footer">
+      <div></div>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn-cancel" onclick="closeDetailModal()">Close</button>
+        <button class="btn-save" id="detail-edit-btn">✏️ Edit Batch</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SALE MODAL -->
+<div class="modal-overlay" id="sale-modal">
+  <div class="modal" style="max-width:540px;">
+    <div class="modal-header"><h2 id="sale-modal-title">New Order / Booking</h2><button class="modal-close" onclick="closeSaleModal()">✕</button></div>
+    <div class="modal-body" style="padding:1.3rem 1.5rem;">
+      <div class="fg">
+        <div class="form-group"><label>Customer Name *</label><input type="text" id="s-customer" placeholder="Customer or company"/></div>
+        <div class="form-group"><label>Phone / Contact</label><input type="text" id="s-phone" placeholder="+60 12-xxx xxxx"/></div>
+        <div class="form-group"><label>Seedling Variety</label>
+          <select id="s-variety"><option value="">-- Select --</option><option>Felda ATH</option><option>Dami Mas</option><option>MPOB Clone</option><option>Sindora</option><option>AA Hybrid IS</option><option>UPB Premier Hybrid</option></select>
+        </div>
+        <div class="form-group"><label>Quantity (seedlings)</label><input type="number" id="s-qty" placeholder="0" oninput="calcSaleTotal()"/></div>
+        <div class="form-group"><label>Unit Price (RM)</label><input type="number" id="s-price" placeholder="0.00" step="0.01" oninput="calcSaleTotal()"/></div>
+        <div class="form-group"><label>Total (RM) <span style="font-size:.62rem;color:var(--sprout);text-transform:none">(auto)</span></label><input type="text" id="s-total" readonly/></div>
+        <div class="form-group"><label>Collection Date *</label><input type="date" id="s-colldate"/></div>
+        <div class="form-group"><label>Status</label>
+          <select id="s-status"><option>Confirmed</option><option>Pending</option><option>Ready</option><option>Collected</option><option>Cancelled</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="s-notes" placeholder="Special requirements, delivery instructions..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <div></div>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn-cancel" onclick="closeSaleModal()">Cancel</button>
+        <button class="btn-save" onclick="saveSale()">💾 Save Order</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- INVENTORY MODAL -->
+<div class="modal-overlay" id="inv-modal">
+  <div class="modal" style="max-width:700px;">
+    <div class="modal-header"><h2>🏪 Update Stock Inventory</h2><button class="modal-close" onclick="closeInventoryModal()">✕</button></div>
+    <div class="modal-body" style="padding:1.3rem 1.5rem;overflow-y:auto">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:.8rem">
+        <button class="btn-add" onclick="addInvRow()" style="padding:.42rem 1rem;font-size:.82rem">+ Add Item</button>
+      </div>
+      <div style="overflow-x:auto">
+      <table class="data-table" id="inv-edit-table">
+        <thead><tr><th>Item Name</th><th>Category</th><th>Quantity</th><th>Unit</th><th>Min. Stock Alert</th><th></th></tr></thead>
+        <tbody id="inv-tbody"></tbody>
+      </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div style="font-size:.75rem;color:#8a7a68">⚠ Items below minimum quantity will show a low stock warning</div>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn-cancel" onclick="closeInventoryModal()">Cancel</button>
+        <button class="btn-save" onclick="saveInventory()">💾 Save Inventory</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+let batches = JSON.parse(localStorage.getItem('mjm_batches')||'[]');
+let invStock = JSON.parse(localStorage.getItem('mjm_invstock')||'[]');
+function saveInv(){localStorage.setItem('mjm_invstock',JSON.stringify(invStock));}
+if(!invStock.length){
+  invStock=[
+    {id:1,name:'Baja NPK Blue 12:12:17',category:'Fertilizer',qty:120,unit:'kg',minqty:50},
+    {id:2,name:'Urea (46% N)',category:'Fertilizer',qty:80,unit:'kg',minqty:40},
+    {id:3,name:'Magnesium Sulphate',category:'Fertilizer',qty:45,unit:'kg',minqty:30},
+    {id:4,name:'Cypermethrin 25 EC',category:'Chemical',qty:8,unit:'L',minqty:5},
+    {id:5,name:'Mancozeb 80 WP',category:'Chemical',qty:12,unit:'kg',minqty:5},
+    {id:6,name:'Glyphosate 41%',category:'Chemical',qty:3,unit:'L',minqty:5},
+    {id:7,name:'Polybag (23×30cm)',category:'Bag/Polybag',qty:5000,unit:'pcs',minqty:1000},
+    {id:8,name:'Polybag (15×23cm)',category:'Bag/Polybag',qty:3000,unit:'pcs',minqty:500},
+    {id:9,name:'Watering Hose',category:'Equipment',qty:4,unit:'pcs',minqty:2},
+  ];
+  saveInv();
+}
+let treatments = JSON.parse(localStorage.getItem('mjm_treatments')||'[]');
+let sales = JSON.parse(localStorage.getItem('mjm_sales')||'[]');
+let editingId=null, detailId=null, editingSaleId=null;
+let currentTab=0;
+const TOTAL_TABS=8;
+
+// ── SEED DATA ──
+if(!batches.length){
+  const now=new Date();
+  batches=[
+    {id:'MJN-2024-001',lotno:'T-001',brand:'Felda ATH',supplier:'FELDA Seeds Sdn Bhd',doqty:5000,focpct:5,focqty:250,dmgsite:180,received:5070,workers:6,datereceived:'2024-01-10',dateplanted:'2024-01-13',transferdate:'2024-04-13',maturitydate:'2024-11-13',stage:'Culling 2',
+     traysData:[{trayno:'T1',type:'Normal',planted:1280,empty:12,actual:1268},{trayno:'T2',type:'Normal',planted:1280,empty:8,actual:1272},{trayno:'T3',type:'Normal',planted:1280,empty:5,actual:1275},{trayno:'T4',type:'Double tone',planted:1240,empty:10,actual:1230}],
+     dmghq:175,tpData:[{tray:'T1,T2',plot:'Plot 1',date:'2024-03-20',norm:1600,pdt:0,icu:0,sin:'SIN-0341',drone:0},{tray:'T3,T4',plot:'Plot 2',date:'2024-03-20',norm:1500,pdt:0,icu:0,sin:'SIN-0341',drone:0},{tray:'T4',plot:'Plot 3',date:'2024-03-21',norm:1700,pdt:0,icu:0,sin:'SIN-0342',drone:0}],
+     cull1Data:[{trayno:'T1',culled:110,rate:'8.68%',date:'2024-05-15'},{trayno:'T2',culled:105,rate:'8.25%',date:'2024-05-15'},{trayno:'T3',culled:105,rate:'8.24%',date:'2024-05-16'},{trayno:'T4',culled:100,rate:'8.13%',date:'2024-05-16'}],
+     cull2Data:[{plot:'Plot 1',total:1600,alive:1400,dead:50,culled:150,balance:1450,rate:'9.38%',date:'2024-07-10'},{plot:'Plot 2',total:1500,alive:1310,dead:40,culled:150,balance:1350,rate:'10.00%',date:'2024-07-11'},{plot:'Plot 3',total:1700,alive:1600,dead:30,culled:100,balance:1600,rate:'5.88%',date:'2024-07-12'}],
+     cull3Data:[],transferData:[],rain1:120,rain2:98,rain3:145,notes:'2nd culling complete. Plot 2 pest issue.'},
+    {id:'MJN-2024-002',lotno:'T-002',brand:'Dami Mas',supplier:'Dami Mas Sdn Bhd',doqty:8000,focpct:5,focqty:400,dmgsite:290,received:8110,workers:8,datereceived:'2024-02-15',dateplanted:'2024-02-18',transferdate:'2024-05-18',maturitydate:'2024-12-18',stage:'Culling 1',
+     traysData:[{trayno:'T1',type:'Normal',planted:1360,empty:5,actual:1355},{trayno:'T2',type:'Normal',planted:1360,empty:8,actual:1352},{trayno:'T3',type:'Normal',planted:1360,empty:3,actual:1357},{trayno:'T4',type:'Normal',planted:1360,empty:7,actual:1353},{trayno:'T5',type:'Normal',planted:1360,empty:4,actual:1356},{trayno:'T6',type:'Double tone',planted:1320,empty:6,actual:1314}],
+     dmghq:285,tpData:[{tray:'T1,T2',plot:'Plot 4',date:'2024-05-10',norm:2000,pdt:200,icu:0,sin:'SIN-0388',drone:0},{tray:'T3,T4',plot:'Plot 5',date:'2024-05-10',norm:2000,pdt:0,icu:0,sin:'SIN-0388',drone:0},{tray:'T5,T6',plot:'Plot 6',date:'2024-05-11',norm:1800,pdt:0,icu:0,sin:'SIN-0389',drone:0},{tray:'T6',plot:'Plot 7',date:'2024-05-11',norm:1700,pdt:0,icu:0,sin:'SIN-0389',drone:0}],
+     cull1Data:[{trayno:'T1',culled:120,rate:'8.85%',date:'2024-07-01'},{trayno:'T2',culled:115,rate:'8.50%',date:'2024-07-01'},{trayno:'T3',culled:150,rate:'11.05%',date:'2024-07-02'},{trayno:'T4',culled:130,rate:'9.61%',date:'2024-07-02'},{trayno:'T5',culled:80,rate:'5.90%',date:'2024-07-03'},{trayno:'T6',culled:85,rate:'6.47%',date:'2024-07-03'}],
+     cull2Data:[],cull3Data:[],transferData:[],rain1:132,rain2:88,rain3:0,notes:'Large batch. Monitoring Plot 6 drainage.'},
+    {id:'MJN-2024-003',lotno:'T-003',brand:'Sindora',supplier:'Sindora Seeds',doqty:6000,focpct:5,focqty:300,dmgsite:180,received:6120,workers:7,datereceived:'2024-05-20',dateplanted:'2024-05-23',transferdate:'2024-08-23',maturitydate:'2025-03-23',stage:'TSK',
+     traysData:[{trayno:'T1',type:'Normal',planted:1220,empty:6,actual:1214},{trayno:'T2',type:'Normal',planted:1220,empty:4,actual:1216},{trayno:'T3',type:'Normal',planted:1220,empty:9,actual:1211},{trayno:'T4',type:'Normal',planted:1220,empty:5,actual:1215},{trayno:'T5',type:'Double tone',planted:1200,empty:7,actual:1193}],
+     dmghq:178,tpData:[],cull1Data:[],cull2Data:[],cull3Data:[],transferData:[],rain1:155,rain2:0,rain3:0,notes:'New batch. 2nd month photo pending.'},
+    {id:'MJN-2023-005',lotno:'T-004',brand:'MPOB Clone',supplier:'MPOB Seeds',doqty:4000,focpct:5,focqty:200,dmgsite:100,received:4100,workers:5,datereceived:'2023-06-01',dateplanted:'2023-06-05',transferdate:'2023-09-05',maturitydate:'2024-04-05',stage:'Complete',
+     traysData:[{trayno:'T1',type:'Normal',planted:1050,empty:10,actual:1040},{trayno:'T2',type:'Normal',planted:1050,empty:8,actual:1042},{trayno:'T3',type:'Normal',planted:1000,empty:12,actual:988},{trayno:'T4',type:'Double tone',planted:1000,empty:6,actual:994}],
+     dmghq:88,tpData:[{tray:'T1,T2',plot:'Plot 8',date:'2023-08-20',norm:1800,pdt:0,icu:0,sin:'SIN-0280',drone:0},{tray:'T3,T4',plot:'Plot 9',date:'2023-08-21',norm:1900,pdt:0,icu:0,sin:'SIN-0281',drone:0}],
+     cull1Data:[{trayno:'T1',culled:90,rate:'8.65%',date:'2023-10-10'},{trayno:'T2',culled:88,rate:'8.45%',date:'2023-10-10'},{trayno:'T3',culled:82,rate:'8.30%',date:'2023-10-11'},{trayno:'T4',culled:80,rate:'8.05%',date:'2023-10-11'}],
+     cull2Data:[{plot:'Plot 8',total:1800,alive:1620,dead:45,culled:135,balance:1485,rate:'7.50%',date:'2023-12-05'},{plot:'Plot 9',total:1900,alive:1710,dead:50,culled:140,balance:1570,rate:'7.37%',date:'2023-12-06'}],
+     cull3Data:[{date:'2024-02-10',plot:'Plot 8',total:1485,opisdata:'1480',diadata:'1478',culled:120,rateplot:'8.08%',ratebatch:'2.93%'},{date:'2024-02-11',plot:'Plot 9',total:1570,opisdata:'1565',diadata:'1560',culled:130,rateplot:'8.28%',ratebatch:'3.17%'}],
+     transferData:[{origplot:'Plot 8',toplot:'Plot-R Store A',qty:1365,date:'2024-03-15',sin:'SIN-0350',drone:1362},{origplot:'Plot 9',toplot:'Plot-R Store A',qty:1440,date:'2024-03-15',sin:'SIN-0350',drone:1436}],
+     rain1:110,rain2:95,rain3:120,notes:'Batch complete. Transferred to Plot-R.'}
+  ];
+  save();
+}
+if(!treatments.length){
+  treatments=[
+    {id:1,batchId:'MJN-2024-001',date:'2024-02-15',type:'Fertilizer',product:'Baja NPK Blue 12:12:17',qty:'50 kg',notes:'Applied per plot'},
+    {id:2,batchId:'MJN-2024-001',date:'2024-03-10',type:'Pesticide',product:'Cypermethrin 25 EC',qty:'2 L',notes:'Aphid control'},
+    {id:3,batchId:'MJN-2024-002',date:'2024-03-18',type:'Fertilizer',product:'Baja NPK Blue 12:12:17',qty:'80 kg',notes:'Basal application'}
+  ];
+  saveTreat();
+}
+if(!sales.length){
+  sales=[
+    {id:'ORD-001',customer:'Ahmad Plantation Sdn Bhd',phone:'+60 12-345 6789',variety:'Felda ATH',qty:2000,price:18.50,total:37000,colldate:'2025-04-10',status:'Confirmed',notes:'Delivery to Miri'},
+    {id:'ORD-002',customer:'Lee Brothers Estate',phone:'+60 16-222 3344',variety:'Dami Mas',qty:1500,price:17.00,total:25500,colldate:'2025-04-18',status:'Pending',notes:''},
+    {id:'ORD-003',customer:'Sawit Jaya Holdings',phone:'+60 19-888 5566',variety:'Felda ATH',qty:3000,price:18.00,total:54000,colldate:'2025-03-30',status:'Ready',notes:'1000 pcs ICU grade'},
+    {id:'ORD-004',customer:'Syarikat Pertanian Bersatu',phone:'',variety:'MPOB Clone',qty:1000,price:14.50,total:14500,colldate:'2024-03-15',status:'Collected',notes:''},
+    {id:'ORD-005',customer:'Bumi Hijau Nursery',phone:'+60 13-777 9900',variety:'Sindora',qty:500,price:15.00,total:7500,colldate:'2025-05-01',status:'Confirmed',notes:''},
+  ];
+  saveSales();
+}
+
+function save(){localStorage.setItem('mjm_batches',JSON.stringify(batches));}
+function saveTreat(){localStorage.setItem('mjm_treatments',JSON.stringify(treatments));}
+function saveSales(){localStorage.setItem('mjm_sales',JSON.stringify(sales));}
+function gv(id){return document.getElementById(id)?.value||'';}
+function gn(id){return parseFloat(document.getElementById(id)?.value)||0;}
+function fmt(x){return (x||0).toLocaleString();}
+function fmtRM(x){return 'RM '+(x||0).toLocaleString('en-MY',{minimumFractionDigits:2});}
+function pct(a,b){return b>0?((a/b)*100).toFixed(1)+'%':'—';}
+function stageClass(s){return{TSK:'s-tsk',TSB:'s-tsb','Culling 1':'s-c1','Culling 2':'s-c2','Culling 3':'s-c3','Transfer':'s-tr','Complete':'s-done'}[s]||'s-tsk';}
+function statusClass(s){return{Confirmed:'sc-confirmed',Pending:'sc-pending',Ready:'sc-ready',Collected:'sc-collected',Cancelled:'sc-cancelled'}[s]||'sc-pending';}
+function survRate(b){
+  const tot=b.received||b.doqty||0;if(!tot)return 0;
+  const c1=(b.cull1Data||[]).reduce((s,r)=>s+(parseFloat(r.culled)||0),0);
+  const c2=(b.cull2Data||[]).reduce((s,r)=>s+(parseFloat(r.dead||r.culled)||0),0); // cull2 uses dead
+  const c3=(b.cull3Data||[]).reduce((s,r)=>s+Math.max(0,(r.total||0)-(parseFloat(r.opisdata)||0)),0); // cull3 = total-balance
+  return Math.max(0,((tot-c1-c2-c3)/tot)*100);
+}
+function daysUntil(d){if(!d)return null;return Math.round((new Date(d)-new Date())/(864e5));}
+function batchAge(planted){if(!planted)return 0;return Math.round((new Date()-new Date(planted))/(864e5*30));}
+function totalSeeds(b){
+  // surviving seeds estimate
+  const tot=b.received||b.doqty||0;
+  const c1=(b.cull1Data||[]).reduce((s,r)=>s+(parseFloat(r.culled)||0),0);
+  const c2=(b.cull2Data||[]).reduce((s,r)=>s+(parseFloat(r.dead||r.culled)||0),0);
+  const c3=(b.cull3Data||[]).reduce((s,r)=>s+Math.max(0,(r.total||0)-(parseFloat(r.opisdata)||0)),0);
+  return Math.max(0,tot-c1-c2-c3);
+}
+
+// ─── LOGIN ───
+function doLogin(){
+  if(document.getElementById('login-user').value==='admin'&&document.getElementById('login-pass').value==='nursery2024'){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    initDash();renderBatchTable();
+  } else {
+    const e=document.getElementById('login-error');e.style.display='block';setTimeout(()=>e.style.display='none',3000);
+  }
+}
+document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('login-user').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+function doLogout(){document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';}
+function showPage(page,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(page==='dashboard')initDash();
+  if(page==='reports')renderReports();
+  if(page==='sales')renderSalesPage();
+}
+function showInnerTab(id,btn){
+  ['rt-summary','rt-stages','rt-culling','rt-treatment'].forEach(t=>document.getElementById(t).style.display='none');
+  document.querySelectorAll('.inner-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).style.display='block';btn.classList.add('active');
+}
+
+// ─── DASHBOARD ───
+function initDash(){
+  document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-MY',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  const active=batches.filter(b=>b.stage!=='Complete');
+  const completed=batches.filter(b=>b.stage==='Complete');
+  const tskBatches=batches.filter(b=>b.stage==='TSK');
+  const tsbBatches=batches.filter(b=>['TSB','Culling 1','Culling 2','Culling 3'].includes(b.stage));
+
+  // TSK seed quantities by age
+  const tskTotal=tskBatches.reduce((s,b)=>s+totalSeeds(b),0);
+  // TSB quantities & mature
+  const tsbTotal=tsbBatches.reduce((s,b)=>s+totalSeeds(b),0);
+  const matureBatches=batches.filter(b=>b.stage!=='Complete'&&b.dateplanted&&batchAge(b.dateplanted)>=10);
+  const matureQty=matureBatches.reduce((s,b)=>s+totalSeeds(b),0);
+  // Sales
+  const totalSold=sales.filter(s=>s.status==='Collected').reduce((s,o)=>s+o.qty,0);
+  const totalRevenue=sales.filter(s=>s.status==='Collected').reduce((s,o)=>s+o.total,0);
+  const activeBookings=sales.filter(s=>['Confirmed','Pending','Ready'].includes(s.status));
+  const pendingCollection=sales.filter(s=>s.status==='Ready');
+  const avgSurv=batches.length?(batches.reduce((s,b)=>s+survRate(b),0)/batches.length):0;
+
+  // ROW 1
+  document.getElementById('dash-row1').innerHTML=`
+    <div class="stat-card sc-green">
+      <div class="stat-icon">🌴</div>
+      <div class="stat-value">${batches.length}</div>
+      <div class="stat-label">Total Batches</div>
+      <div class="sc-split" style="margin-top:.6rem">
+        <div class="sc-half"><div class="sv">${active.length}</div><div class="sl">Active</div></div>
+        <div class="sc-half"><div class="sv">${completed.length}</div><div class="sl">Completed</div></div>
+      </div>
+    </div>
+    <div class="stat-card sc-amber">
+      <div class="stat-icon">🌱</div>
+      <div class="stat-value">${fmt(tskTotal)}</div>
+      <div class="stat-label">Pre-Nursery (TSK)</div>
+      <div class="stat-sub">${tskBatches.length} active batch${tskBatches.length!==1?'es':''}</div>
+    </div>
+    <div class="stat-card sc-teal">
+      <div class="stat-icon">🌿</div>
+      <div class="stat-value">${fmt(tsbTotal)}</div>
+      <div class="stat-label">Main Nursery (TSB)</div>
+      <div class="sc-split" style="margin-top:.6rem">
+        <div class="sc-half"><div class="sv">${fmt(matureQty)}</div><div class="sl">Ready to Sell (10-12mo)</div></div>
+        <div class="sc-half"><div class="sv">${matureBatches.length}</div><div class="sl">Mature Batches</div></div>
+      </div>
+    </div>
+    <div class="stat-card sc-sky">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-value">${avgSurv.toFixed(1)}%</div>
+      <div class="stat-label">Avg Survival Rate</div>
+      <div class="stat-sub">All active batches</div>
+    </div>`;
+
+  // ROW 2
+  const weekRevenue=getWeekRevenue();
+  document.getElementById('dash-row2').innerHTML=`
+    <div class="stat-card sc-green">
+      <div class="stat-icon">💰</div>
+      <div class="stat-value">${fmt(totalSold)}</div>
+      <div class="stat-label">Total Seedlings Sold</div>
+      <div class="stat-sub">${fmtRM(totalRevenue)} total revenue</div>
+    </div>
+    <div class="stat-card sc-amber">
+      <div class="stat-icon">📈</div>
+      <div class="stat-value">${fmtRM(weekRevenue)}</div>
+      <div class="stat-label">This Week Revenue</div>
+      <div class="stat-sub">From collected orders</div>
+    </div>
+    <div class="stat-card sc-sky">
+      <div class="stat-icon">📋</div>
+      <div class="stat-value">${activeBookings.length}</div>
+      <div class="stat-label">Active Bookings</div>
+      <div class="stat-sub">${sales.filter(s=>s.status==='Confirmed').length} confirmed · ${sales.filter(s=>s.status==='Pending').length} pending</div>
+    </div>
+    <div class="stat-card sc-rust">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-value">${pendingCollection.length}</div>
+      <div class="stat-label">Awaiting Collection</div>
+      <div class="stat-sub">${fmt(pendingCollection.reduce((s,o)=>s+o.qty,0))} seedlings ready</div>
+    </div>`;
+
+  // Gauge
+  document.getElementById('gauge-path').style.strokeDashoffset=251-(avgSurv/100)*251;
+  document.getElementById('gauge-val').textContent=avgSurv.toFixed(1)+'%';
+
+  // Upcoming bookings
+  const upcoming=sales.filter(s=>['Confirmed','Pending','Ready'].includes(s.status)).sort((a,b)=>new Date(a.colldate)-new Date(b.colldate));
+  document.getElementById('dash-bookings').innerHTML=upcoming.length?upcoming.map(o=>{
+    const d=daysUntil(o.colldate);
+    const dl=d===null?'—':d<0?'Overdue':d===0?'Today':`${d}d`;
+    return`<div class="booking-item">
+      <div><div class="bi-customer">${o.customer}</div><div class="bi-sub">${o.variety||'—'}</div></div>
+      <div class="bi-qty">${fmt(o.qty)}</div>
+      <div><div class="bi-date">${o.colldate||'—'}</div><div style="text-align:right;margin-top:.2rem">${dl}</div></div>
+      <span class="status-chip ${statusClass(o.status)}">${o.status}</span>
+    </div>`}).join(''):'<p style="color:#bbb;font-size:.8rem;text-align:center;padding:1.5rem">No active bookings</p>';
+
+  // Inventory
+  const storeQty=batches.reduce((s,b)=>s+(b.transferData||[]).reduce((x,r)=>x+(r.qty||0),0),0);
+  const soldQty=totalSold;
+  const availStore=Math.max(0,storeQty-soldQty);
+  const chemicals=invStock.filter(i=>i.category==='Chemical'||i.category==='Fertilizer');
+  const others=invStock.filter(i=>i.category==='Other'||i.category==='Equipment'||i.category==='Bag/Polybag');
+  document.getElementById('dash-inventory').innerHTML=`
+    <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--leaf);margin-bottom:.4rem;">🌱 Seedlings</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.8rem;">
+      <div class="inv-item"><div class="inv-label">In Store (Plot-R)</div><div class="inv-value">${fmt(availStore)}</div><div class="inv-bar"><div class="inv-bar-fill ibf-teal" style="width:${storeQty>0?Math.min(100,availStore/storeQty*100):0}%"></div></div></div>
+      <div class="inv-item"><div class="inv-label">Ready to Sell (10-12mo)</div><div class="inv-value">${fmt(matureQty)}</div><div class="inv-bar"><div class="inv-bar-fill ibf-green" style="width:${tsbTotal>0?Math.min(100,matureQty/tsbTotal*100):0}%"></div></div></div>
+      <div class="inv-item"><div class="inv-label">Total in Nursery</div><div class="inv-value">${fmt(tskTotal+tsbTotal)}</div><div class="inv-bar"><div class="inv-bar-fill ibf-sky" style="width:80%"></div></div></div>
+      <div class="inv-item"><div class="inv-label">Booked</div><div class="inv-value">${fmt(activeBookings.reduce((s,o)=>s+o.qty,0))}</div><div class="inv-sub" style="color:var(--amber)">${activeBookings.length} orders</div></div>
+    </div>
+    ${chemicals.length?`<div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);margin-bottom:.4rem;">🧪 Chemicals & Fertilizers</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.8rem;">${chemicals.map(i=>`<div class="inv-item"><div class="inv-label">${i.name}</div><div class="inv-value" style="font-size:1.2rem">${i.qty} ${i.unit}</div><div class="inv-sub" style="color:${i.qty<=i.minqty?'var(--rust)':'#8a7a68'}">${i.qty<=i.minqty?'⚠ Low stock':i.category}</div></div>`).join('')}</div>`:''}
+    ${others.length?`<div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--sky);margin-bottom:.4rem;">📦 Other Stock</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">${others.map(i=>`<div class="inv-item"><div class="inv-label">${i.name}</div><div class="inv-value" style="font-size:1.2rem">${i.qty} ${i.unit}</div><div class="inv-sub" style="color:${i.qty<=i.minqty?'var(--rust)':'#8a7a68'}">${i.qty<=i.minqty?'⚠ Low stock':i.category}</div></div>`).join('')}</div>`:'<div style="font-size:.78rem;color:#bbb;padding:.5rem 0">No other stock recorded</div>'}
+  `;
+
+  // Recent activity
+  const acts=[
+    ...batches.map(b=>({t:b.dateplanted,txt:`<strong>${b.id}</strong> planted (${fmt(b.received||b.doqty)} seeds)`,c:'var(--sprout)',stage:'Seed Planting'})),
+    ...batches.filter(b=>b.tpData&&b.tpData.length).map(b=>({t:b.tpData[0]?.date,txt:`<strong>${b.id}</strong> transplanted to Main Nursery`,c:'var(--amber)',stage:'Transplanting'})),
+    ...batches.filter(b=>b.cull1Data&&b.cull1Data.length).map(b=>({t:b.cull1Data[0]?.date,txt:`<strong>${b.id}</strong> 1st culling completed`,c:'var(--rust)',stage:'1st Culling'})),
+    ...batches.filter(b=>b.cull2Data&&b.cull2Data.length).map(b=>({t:b.cull2Data[0]?.date,txt:`<strong>${b.id}</strong> 2nd culling completed`,c:'#e06020',stage:'2nd Culling'})),
+    ...batches.filter(b=>b.stage==='Complete').map(b=>({t:b.transferData?.[0]?.date,txt:`<strong>${b.id}</strong> batch completed & transferred`,c:'var(--teal)',stage:'Completed'})),
+    ...sales.filter(s=>s.status==='Collected').map(o=>({t:o.colldate,txt:`Order <strong>${o.id}</strong> collected by ${o.customer}`,c:'var(--sky)',stage:'Sale'})),
+  ].filter(a=>a.t).sort((a,b)=>new Date(b.t)-new Date(a.t)).slice(0,6);
+  document.getElementById('activity-list').innerHTML=acts.map(a=>`
+    <div class="activity-item" style="padding:.5rem .6rem;margin-bottom:0">
+      <div class="act-dot" style="background:${a.c}"></div>
+      <div><div class="act-text" style="font-size:.79rem">${a.txt}</div><div class="act-time">${a.t}</div></div>
+    </div>`).join('');
+
+  // Milestones (30 latest)
+  const allActs=[
+    ...batches.map(b=>({t:b.dateplanted,txt:`Batch <strong>${b.id}</strong> — Seed Planting`,stage:b.stage,status:'done',c:'var(--sprout)'})),
+    ...batches.filter(b=>b.tpData&&b.tpData.length).map(b=>({t:b.tpData[0]?.date,txt:`Batch <strong>${b.id}</strong> — Transplanted to TSB`,stage:b.stage,status:'done',c:'var(--amber)'})),
+    ...batches.filter(b=>b.cull1Data&&b.cull1Data.length).map(b=>({t:b.cull1Data[0]?.date,txt:`Batch <strong>${b.id}</strong> — 1st Culling`,stage:'Culling 1',status:'done',c:'var(--amber)'})),
+    ...batches.filter(b=>b.cull2Data&&b.cull2Data.length).map(b=>({t:b.cull2Data[0]?.date,txt:`Batch <strong>${b.id}</strong> — 2nd Culling`,stage:'Culling 2',status:'done',c:'#e06020'})),
+    ...batches.filter(b=>b.cull3Data&&b.cull3Data.length).map(b=>({t:b.cull3Data[0]?.date,txt:`Batch <strong>${b.id}</strong> — 3rd Culling`,stage:'Culling 3',status:'done',c:'var(--rust)'})),
+    ...batches.filter(b=>b.transferdate).map(b=>({t:b.transferdate,txt:`Batch <strong>${b.id}</strong> — Transfer Date`,stage:b.stage,status:daysUntil(b.transferdate)<0?'done':daysUntil(b.transferdate)<=30?'urgent':'upcoming',c:'var(--teal)'})),
+    ...batches.filter(b=>b.maturitydate).map(b=>({t:b.maturitydate,txt:`Batch <strong>${b.id}</strong> — Maturity / Ready for Sale`,stage:b.stage,status:daysUntil(b.maturitydate)<0?'done':daysUntil(b.maturitydate)<=30?'urgent':'upcoming',c:'var(--sky)'})),
+    ...sales.map(o=>({t:o.colldate,txt:`Order <strong>${o.id}</strong> — ${o.customer} (${fmt(o.qty)} seedlings)`,stage:o.status,status:o.status==='Collected'?'done':daysUntil(o.colldate)<=7?'urgent':'upcoming',c:'var(--sky)'})),
+  ].filter(a=>a.t).sort((a,b)=>new Date(b.t)-new Date(a.t)).slice(0,30);
+
+  document.getElementById('milestone-list').innerHTML=allActs.length?allActs.map(m=>{
+    const d=daysUntil(m.t);
+    const icon=m.status==='done'?'✅':m.status==='urgent'?'🔴':'🟡';
+    const timeStr=m.status==='done'?m.t:(d===0?'Today':d>0?`In ${d} days`:`${Math.abs(d)} days ago`);
+    return`<div class="act-item">
+      <div class="act-dot" style="background:${m.c};margin-top:.3rem">${icon}</div>
+      <div class="act-info"><div class="act-batch">${m.txt}</div><div class="act-stage">${m.stage}</div></div>
+      <div class="act-time">${timeStr}</div>
+    </div>`;
+  }).join(''):'<p style="color:#bbb;font-size:.8rem;text-align:center;padding:1.5rem">No activities</p>';
+}
+
+function getWeekRevenue(){
+  const now=new Date();const weekAgo=new Date(now-7*864e5);
+  return sales.filter(s=>s.status==='Collected'&&s.colldate&&new Date(s.colldate)>=weekAgo).reduce((s,o)=>s+o.total,0);
+}
+
+// ─── BATCH TABLE ───
+function renderBatchTable(){
+  const search=(document.getElementById('batch-search')?.value||'').toLowerCase();
+  const sf=document.getElementById('stage-filter')?.value||'';
+  const filtered=batches.filter(b=>(!search||(b.id+(b.brand||'')+(b.supplier||'')).toLowerCase().includes(search))&&(!sf||b.stage===sf));
+  const tbody=document.getElementById('batch-tbody');
+  const empty=document.getElementById('batch-empty');
+  if(!filtered.length){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  tbody.innerHTML=filtered.map(b=>{
+    const sv=survRate(b);const d=daysUntil(b.transferdate);const dm=daysUntil(b.maturitydate);
+    const dl=b.transferdate?(d<0?'<span style="color:var(--leaf)">✓ Done</span>':d<=30?`<span style="color:var(--rust);font-weight:600">${d}d</span>`:`<span>${b.transferdate}</span>`):'—';
+    const ml=b.maturitydate?(dm<0?'<span style="color:var(--teal)">✓ Mature</span>':dm<=60?`<span style="color:var(--amber);font-weight:600">${dm}d</span>`:`<span>${b.maturitydate}</span>`):'—';
+    return`<tr>
+      <td><div class="batch-id">${b.id}</div><div style="font-size:.7rem;color:#aaa">${b.lotno||''}</div></td>
+      <td><strong>${b.brand||'—'}</strong><div style="font-size:.73rem;color:#8a7a68">${b.supplier||''}</div></td>
+      <td>${b.dateplanted||'—'}</td>
+      <td>${fmt(b.received||b.doqty)}</td>
+      <td><span class="stage-chip ${stageClass(b.stage)}">${b.stage}</span></td>
+      <td><div class="sbar-wrap"><div class="sbar-track"><div class="sbar-fill ${sv>=90?'':sv>=70?'warn':'bad'}" style="width:${Math.min(sv,100)}%"></div></div><span style="font-size:.76rem">${sv.toFixed(0)}%</span></div></td>
+      <td>${dl}</td>
+      <td>${ml}</td>
+      <td><button class="action-btn" onclick="viewDetail('${b.id}')">👁</button><button class="action-btn" onclick="editBatch('${b.id}')">✏️</button><button class="action-btn del" onclick="deleteBatch('${b.id}')">🗑</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── SALES PAGE ───
+function renderSalesPage(){
+  const totalSold=sales.filter(s=>s.status==='Collected').reduce((s,o)=>s+o.qty,0);
+  const totalRevenue=sales.filter(s=>s.status==='Collected').reduce((s,o)=>s+o.total,0);
+  const active=sales.filter(s=>['Confirmed','Pending','Ready'].includes(s.status));
+  const weekRev=getWeekRevenue();
+  document.getElementById('sales-stats').innerHTML=`
+    <div class="stat-card sc-green"><div class="stat-icon">💰</div><div class="stat-value">${fmt(totalSold)}</div><div class="stat-label">Total Sold</div></div>
+    <div class="stat-card sc-teal"><div class="stat-icon">💵</div><div class="stat-value">${fmtRM(totalRevenue)}</div><div class="stat-label">Total Revenue</div></div>
+    <div class="stat-card sc-amber"><div class="stat-icon">📈</div><div class="stat-value">${fmtRM(weekRev)}</div><div class="stat-label">This Week</div></div>
+    <div class="stat-card sc-sky"><div class="stat-icon">📋</div><div class="stat-value">${active.length}</div><div class="stat-label">Active Orders</div><div class="stat-sub">${sales.filter(s=>s.status==='Ready').length} awaiting collection</div></div>`;
+
+  // Weekly revenue chart (last 8 weeks)
+  const weeks=[];
+  for(let i=7;i>=0;i--){
+    const from=new Date(Date.now()-i*7*864e5);
+    const to=new Date(Date.now()-(i-1)*7*864e5);
+    const rev=sales.filter(s=>s.status==='Collected'&&s.colldate&&new Date(s.colldate)>=from&&new Date(s.colldate)<to).reduce((s,o)=>s+o.total,0);
+    const label='W'+(8-i);
+    weeks.push({label,rev});
+  }
+  const maxRev=Math.max(...weeks.map(w=>w.rev),1);
+  document.getElementById('revenue-chart-wrap').innerHTML=`
+    <div style="display:flex;align-items:flex-end;gap:.5rem;height:100px;padding:.5rem 0 0">
+      ${weeks.map(w=>`<div class="rev-bar-wrap">
+        <div class="rev-amount">${w.rev>0?'RM'+(w.rev/1000).toFixed(1)+'K':''}</div>
+        <div class="rev-bar" style="height:${Math.max(4,(w.rev/maxRev)*72)}px"></div>
+        <div class="rev-label">${w.label}</div>
+      </div>`).join('')}
+    </div>
+    <div style="font-size:.72rem;color:#aaa;margin-top:.4rem">Weekly collected revenue (last 8 weeks)</div>`;
+  renderBookingsTable();
+}
+function renderBookingsTable(){
+  const f=document.getElementById('booking-filter')?.value||'';
+  const filtered=sales.filter(s=>!f||s.status===f).sort((a,b)=>new Date(a.colldate)-new Date(b.colldate));
+  document.getElementById('bookings-tbody').innerHTML=filtered.map(o=>`
+    <tr>
+      <td class="batch-id">${o.id}</td>
+      <td><strong>${o.customer}</strong>${o.phone?`<div style="font-size:.73rem;color:#8a7a68">${o.phone}</div>`:''}</td>
+      <td>${o.variety||'—'}</td>
+      <td>${fmt(o.qty)}</td>
+      <td>${fmtRM(o.price)}</td>
+      <td style="font-weight:700">${fmtRM(o.total)}</td>
+      <td>${o.colldate||'—'}</td>
+      <td><span class="status-chip ${statusClass(o.status)}">${o.status}</span></td>
+      <td>
+        <button class="action-btn" onclick="editSale('${o.id}')">✏️</button>
+        <button class="action-btn del" onclick="deleteSale('${o.id}')">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+function openSaleModal(){editingSaleId=null;document.getElementById('sale-modal-title').textContent='New Order / Booking';['s-customer','s-phone','s-qty','s-price','s-total','s-colldate','s-notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('s-variety').value='';document.getElementById('s-status').value='Confirmed';document.getElementById('sale-modal').classList.add('open');}
+function editSale(id){const o=sales.find(x=>x.id===id);if(!o)return;editingSaleId=id;document.getElementById('sale-modal-title').textContent='Edit Order — '+id;const set=(fid,val)=>{const e=document.getElementById(fid);if(e)e.value=val||'';};set('s-customer',o.customer);set('s-phone',o.phone);set('s-qty',o.qty);set('s-price',o.price);set('s-total',fmtRM(o.total));set('s-colldate',o.colldate);set('s-notes',o.notes);document.getElementById('s-variety').value=o.variety||'';document.getElementById('s-status').value=o.status||'Confirmed';document.getElementById('sale-modal').classList.add('open');}
+function closeSaleModal(){document.getElementById('sale-modal').classList.remove('open');}
+function calcSaleTotal(){const q=gn('s-qty'),p=gn('s-price');const t=document.getElementById('s-total');if(t)t.value=q&&p?fmtRM(q*p):'';}
+function saveSale(){
+  const customer=gv('s-customer').trim();if(!customer){toast('Customer name required','error');return;}
+  const qty=gn('s-qty');const price=gn('s-price');
+  const o={id:editingSaleId||('ORD-'+(String(sales.length+1).padStart(3,'0'))),customer,phone:gv('s-phone'),variety:gv('s-variety'),qty,price,total:qty*price,colldate:gv('s-colldate'),status:gv('s-status'),notes:gv('s-notes')};
+  if(editingSaleId){const i=sales.findIndex(x=>x.id===editingSaleId);if(i>=0)sales[i]=o;}
+  else sales.push(o);
+  saveSales();closeSaleModal();renderSalesPage();initDash();toast(editingSaleId?'Order updated ✓':'Order saved ✓','success');
+}
+function deleteSale(id){if(!confirm('Delete order '+id+'?'))return;sales=sales.filter(s=>s.id!==id);saveSales();renderSalesPage();initDash();toast('Order deleted','error');}
+
+// ─── BATCH MODAL ───
+function calcFOC(){
+  const doq=gn('f-doqty'),focPct=parseFloat(document.getElementById('f-focpct')?.value)||0;
+  const foc=Math.round(doq*focPct/100),dmg=gn('f-dmgsite');
+  const total=doq+foc;
+  const received=total-dmg;
+  const fe=document.getElementById('f-focqty'),re=document.getElementById('f-received');
+  if(fe)fe.value=foc||'';if(re)re.value=received>0?received:'';
+  // Actual Receive Rate = received / (doq+foc) — must be >= 100% - focPct meaning close to 100%
+  const receivedRate=document.getElementById('f-receivedrate');
+  if(receivedRate)receivedRate.value=total>0?((received/total)*100).toFixed(2)+'%':'—';
+  const threshRate=document.getElementById('f-receivedrate-thresh');
+  if(threshRate){
+    const threshold=100-focPct; // if FOC is 5%, target >95%
+    const actual=total>0?(received/total)*100:0;
+    threshRate.style.color=actual>=threshold?'var(--leaf)':'var(--rust)';
+  }
+  calcTskSummary();
+}
+function calcDates(){
+  const dp=document.getElementById('f-dateplanted')?.value;if(!dp)return;
+  const d=new Date(dp);
+  const td=document.getElementById('f-transferdate');if(td){const t=new Date(d);t.setMonth(t.getMonth()+3);td.value=t.toISOString().split('T')[0];}
+  const md=document.getElementById('f-maturitydate');if(md){const m=new Date(d);m.setMonth(m.getMonth()+10);md.value=m.toISOString().split('T')[0];}
+}
+function genBatchNo(){
+  const yr=new Date().getFullYear();
+  const ex=batches.filter(b=>b.id&&b.id.startsWith('MJN-'+yr+'-'));
+  let max=0;ex.forEach(b=>{const n=parseInt(b.id.split('-')[2])||0;if(n>max)max=n;});
+  return 'MJN-'+yr+'-'+(String(max+1).padStart(3,'0'));
+}
+function goTab(idx){
+  for(let i=0;i<TOTAL_TABS;i++){document.getElementById('mpane-'+i).classList.toggle('active',i===idx);document.getElementById('mtab-'+i).classList.toggle('active',i===idx);}
+  currentTab=idx;document.getElementById('step-cur').textContent=idx+1;
+  document.getElementById('btn-prev').style.display=idx===0?'none':'';
+  document.getElementById('btn-next').style.display=idx===TOTAL_TABS-1?'none':'';
+  if(idx===1){
+    calcTskSummary();
+    // Mirror receive rate from tab 1
+    const rr=document.getElementById('f-receivedrate');const rr2=document.getElementById('f-receivedrate2');
+    if(rr&&rr2)rr2.value=rr.value;
+  }
+  if(idx===2)calcTransplant();if(idx===3)calcCull1Summary();
+  if(idx===4)calcCull2Summary();if(idx===5)calcCull3Summary();if(idx===6)calcTransferSummary();
+}
+function nextTab(){if(currentTab<TOTAL_TABS-1)goTab(currentTab+1);}
+function prevTab(){if(currentTab>0)goTab(currentTab-1);}
+function saveTab(idx){
+  // Save all data from every tab
+  const id=gv('f-batchno').trim();
+  if(id){
+    const brand=gv('f-brand').trim();
+    if(brand||editingId){
+      const batch={id,lotno:gv('f-lotno'),brand:brand||'—',supplier:gv('f-supplier'),doqty:gn('f-doqty'),focpct:parseFloat(gv('f-focpct'))||0,focqty:gn('f-focqty'),dmgsite:gn('f-dmgsite'),received:gn('f-received'),workers:gn('f-workers'),datereceived:gv('f-datereceived'),dateplanted:gv('f-dateplanted'),transferdate:gv('f-transferdate'),maturitydate:gv('f-maturitydate'),stage:gv('f-stage'),traysData:getTrayData(),dmghq:gn('f-dmghq'),tpData:getTpData(),cull1Data:getCull1Data(),cull2Data:getCull2Data(),cull3Data:getCull3Data(),transferData:getTransferData(),rain1:gn('f-rain1'),rain2:gn('f-rain2'),rain3:gn('f-rain3'),notes:gv('f-notes')};
+      autoSetStage(batch);
+      if(editingId){const i=batches.findIndex(b=>b.id===editingId);if(i>=0)batches[i]=batch;else batches.push(batch);}
+      else if(!batches.find(b=>b.id===id)){batches.push(batch);}
+      else{const i=batches.findIndex(b=>b.id===id);if(i>=0)batches[i]=batch;}
+      save();renderBatchTable();initDash();
+    }
+  }
+  const s=document.getElementById('save-status-'+idx);
+  document.getElementById('mtab-'+idx).classList.add('saved-tab');
+  if(s){s.classList.add('show');setTimeout(()=>s.classList.remove('show'),2200);}
+  const st=document.getElementById('modal-save-time');
+  if(st)st.textContent='Last saved: '+new Date().toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});
+  toast('Saved ✓','success');
+}
+function resetModal(){
+  currentTab=0;goTab(0);
+  for(let i=0;i<TOTAL_TABS;i++){const b=document.getElementById('mtab-'+i);if(b)b.classList.remove('saved-tab','active');}
+  document.getElementById('mtab-0').classList.add('active');
+  ['batchno','lotno','doqty','focqty','dmgsite','received','workers','datereceived','dateplanted','transferdate','maturitydate','dmghq','hqverify','dmgrate','rain1','rain2','rain3','notes'].forEach(fid=>{const e=document.getElementById('f-'+fid);if(e)e.value='';});
+  ['f-brand','f-supplier'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('f-stage').value='TSK';document.getElementById('f-focpct').value='0';
+  ['tray-tbody','cull1-tbody','cull2-tbody','cull3-tbody'].forEach(id=>document.getElementById(id).innerHTML='');
+  document.getElementById('tp-tbody').innerHTML='';addTpRow();
+  document.getElementById('transfer-tbody').innerHTML='';addTransferRow();
+}
+function openAddModal(){editingId=null;resetModal();document.getElementById('modal-title').textContent='New Batch';const b=document.getElementById('f-batchno');if(b)b.value=genBatchNo();document.getElementById('batch-modal').classList.add('open');}
+function editBatch(id){
+  const b=batches.find(x=>x.id===id);if(!b)return;editingId=id;resetModal();
+  document.getElementById('modal-title').textContent='Edit — '+id;
+  const set=(fid,val)=>{const e=document.getElementById('f-'+fid);if(e)e.value=val||'';};
+  set('batchno',b.id);set('lotno',b.lotno);set('doqty',b.doqty);set('focqty',b.focqty);
+  set('dmgsite',b.dmgsite);set('received',b.received);set('workers',b.workers);
+  set('datereceived',b.datereceived);set('dateplanted',b.dateplanted);set('transferdate',b.transferdate);set('maturitydate',b.maturitydate);
+  set('dmghq',b.dmghq);set('rain1',b.rain1);set('rain2',b.rain2);set('rain3',b.rain3);set('notes',b.notes);
+  document.getElementById('f-brand').value=b.brand||'';document.getElementById('f-supplier').value=b.supplier||'';
+  document.getElementById('f-stage').value=b.stage||'TSK';document.getElementById('f-focpct').value=b.focpct||0;
+  fillTrayData(b.traysData);fillTpData(b.tpData);fillCull1Data(b.cull1Data);fillCull2Data(b.cull2Data);fillCull3Data(b.cull3Data);fillTransferData(b.transferData);
+  document.getElementById('batch-modal').classList.add('open');
+  setTimeout(()=>{calcTskSummary();calcTransplant();calcCull1Summary();calcCull2Summary();calcCull3Summary();calcTransferSummary();},80);
+}
+function closeModal(){document.getElementById('batch-modal').classList.remove('open');}
+function deleteBatch(id){if(!confirm('Delete batch '+id+'?'))return;batches=batches.filter(b=>b.id!==id);save();renderBatchTable();initDash();toast('Batch deleted','error');}
+function autoSetStage(batch){
+  // Auto-determine stage from data present
+  if(batch.stage==='Complete') return; // don't override manually set Complete
+  if(batch.cull3Data&&batch.cull3Data.length>0){batch.stage='Culling 3';return;}
+  if(batch.cull2Data&&batch.cull2Data.length>0){batch.stage='Culling 2';return;}
+  if(batch.tpData&&batch.tpData.length>0&&(batch.cull1Data||[]).length>0){batch.stage='Culling 1';return;}
+  if(batch.tpData&&batch.tpData.length>0){batch.stage='TSB';return;}
+  if(batch.traysData&&batch.traysData.length>0){batch.stage='TSK';return;}
+}
+function saveBatch(){
+  const id=gv('f-batchno').trim();if(!id){toast('Batch number required','error');goTab(0);return;}
+  const brand=gv('f-brand').trim();if(!brand){toast('Seed brand required','error');goTab(0);return;}
+  const batch={id,lotno:gv('f-lotno'),brand,supplier:gv('f-supplier'),doqty:gn('f-doqty'),focpct:parseFloat(gv('f-focpct'))||0,focqty:gn('f-focqty'),dmgsite:gn('f-dmgsite'),received:gn('f-received'),workers:gn('f-workers'),datereceived:gv('f-datereceived'),dateplanted:gv('f-dateplanted'),transferdate:gv('f-transferdate'),maturitydate:gv('f-maturitydate'),stage:gv('f-stage'),traysData:getTrayData(),dmghq:gn('f-dmghq'),tpData:getTpData(),cull1Data:getCull1Data(),cull2Data:getCull2Data(),cull3Data:getCull3Data(),transferData:getTransferData(),rain1:gn('f-rain1'),rain2:gn('f-rain2'),rain3:gn('f-rain3'),notes:gv('f-notes')};
+  autoSetStage(batch);
+  // Update stage field to reflect auto-detection
+  const stageEl=document.getElementById('f-stage');if(stageEl)stageEl.value=batch.stage;
+  if(editingId){const i=batches.findIndex(b=>b.id===editingId);if(i>=0)batches[i]=batch;else batches.push(batch);}
+  else{if(batches.find(b=>b.id===id)){toast('Batch ID exists','error');return;}batches.push(batch);}
+  save();closeModal();renderBatchTable();initDash();toast(editingId?'Batch updated ✓':'Batch added ✓','success');
+}
+
+// ─── TRAY TABLE ───
+function makeTrayRow(i,d){d=d||{};return`<tr><td><input type="text" class="tr-trayno w80" value="${d.trayno||('T'+(i+1))}"/></td><td><select class="tr-type w100"><option ${d.type==='Normal'?'selected':''}>Normal</option><option ${d.type==='Double tone'?'selected':''}>Double tone</option></select></td><td><input type="number" class="tr-planted w80" value="${d.planted||''}" oninput="calcTrayRow(this);calcTskSummary()"/></td><td><input type="number" class="tr-empty w80" value="${d.empty||''}" oninput="calcTrayRow(this);calcTskSummary()"/></td><td><input type="number" class="tr-actual w80" value="${d.actual||''}" readonly/></td><td><button type="button" class="btn-sm red" onclick="this.closest('tr').remove();calcTskSummary()">✕</button></td></tr>`;}
+function calcTrayRow(el){const row=el.closest('tr');const p=parseFloat(row.querySelector('.tr-planted').value)||0,e=parseFloat(row.querySelector('.tr-empty').value)||0;row.querySelector('.tr-actual').value=Math.max(0,p-e)||'';}
+function addTrayRow(){document.getElementById('tray-tbody').insertAdjacentHTML('beforeend',makeTrayRow(document.getElementById('tray-tbody').rows.length));}
+function fillTrayData(td){const tbody=document.getElementById('tray-tbody');tbody.innerHTML='';(td||[]).forEach((d,i)=>tbody.insertAdjacentHTML('beforeend',makeTrayRow(i,d)));}
+function getTrayData(){return Array.from(document.querySelectorAll('#tray-tbody tr')).map(r=>({trayno:r.querySelector('.tr-trayno')?.value||'',type:r.querySelector('.tr-type')?.value||'Normal',planted:parseFloat(r.querySelector('.tr-planted')?.value)||0,empty:parseFloat(r.querySelector('.tr-empty')?.value)||0,actual:parseFloat(r.querySelector('.tr-actual')?.value)||0}));}
+function calcTskSummary(){
+  let tp=0,te=0,ta=0;
+  document.querySelectorAll('#tray-tbody tr').forEach(r=>{
+    tp+=parseFloat(r.querySelector('.tr-planted')?.value)||0;
+    te+=parseFloat(r.querySelector('.tr-empty')?.value)||0;
+    ta+=parseFloat(r.querySelector('.tr-actual')?.value)||0;
+  });
+  const dmg=gn('f-dmgsite'),rate=ta>0?((dmg/ta)*100).toFixed(2)+'%':'0.00%';
+  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  s('sum-tsk-planted',tp.toLocaleString());
+  s('sum-tsk-empty',te.toLocaleString());
+  s('sum-tsk-actual',ta.toLocaleString());
+  s('sum-tsk-dmgrate',rate);
+  const dr=document.getElementById('f-dmgrate');if(dr)dr.value=rate;
+  // Actual Planted Rate = actual planted / received (must be > 100% ideally, target >95%)
+  const received=gn('f-received')||gn('f-doqty');
+  const pr=document.getElementById('f-plantedrate');
+  if(pr){
+    const plantedRate=received>0?((ta/received)*100).toFixed(2)+'%':'—';
+    pr.value=plantedRate;
+    pr.style.color=received>0&&(ta/received)>=0.95?'var(--leaf)':'var(--rust)';
+  }
+}
+
+// ─── TRANSPLANTING ───
+function makeTpRow(d){d=d||{};return`<tr><td><input type="text" class="tp-tray w80" value="${d.tray||''}"/></td><td><input type="text" class="tp-plot w80" value="${d.plot||''}"/></td><td><input type="date" class="tp-date w120" value="${d.date||''}"/></td><td><input type="number" class="tp-norm w80" value="${d.norm||''}" oninput="calcTransplant()"/></td><td><input type="number" class="tp-pdt w80" value="${d.pdt||''}" oninput="calcTransplant()"/></td><td><input type="number" class="tp-icu w80" value="${d.icu||''}" oninput="calcTransplant()"/></td><td><input type="text" class="tp-sin w80" value="${d.sin||''}"/></td><td><input type="number" class="tp-drone w80" value="${d.drone||''}"/></td><td><button type="button" class="btn-sm red" onclick="this.closest('tr').remove();calcTransplant()">✕</button></td></tr>`;}
+function addTpRow(){document.getElementById('tp-tbody').insertAdjacentHTML('beforeend',makeTpRow());}
+function fillTpData(td){const tbody=document.getElementById('tp-tbody');tbody.innerHTML='';if(td&&td.length){td.forEach(d=>tbody.insertAdjacentHTML('beforeend',makeTpRow(d)));}else addTpRow();}
+function getTpData(){return Array.from(document.querySelectorAll('#tp-tbody tr')).map(r=>({tray:r.querySelector('.tp-tray')?.value||'',plot:r.querySelector('.tp-plot')?.value||'',date:r.querySelector('.tp-date')?.value||'',norm:parseFloat(r.querySelector('.tp-norm')?.value)||0,pdt:parseFloat(r.querySelector('.tp-pdt')?.value)||0,icu:parseFloat(r.querySelector('.tp-icu')?.value)||0,sin:r.querySelector('.tp-sin')?.value||'',drone:parseFloat(r.querySelector('.tp-drone')?.value)||0}));}
+function calcTransplant(){let nr=0,pr=0,ir=0;document.querySelectorAll('.tp-norm').forEach(i=>nr+=parseFloat(i.value)||0);document.querySelectorAll('.tp-pdt').forEach(i=>pr+=parseFloat(i.value)||0);document.querySelectorAll('.tp-icu').forEach(i=>ir+=parseFloat(i.value)||0);const grand=nr+pr+ir;let totalPlanted=0;document.querySelectorAll('#tray-tbody tr').forEach(r=>{totalPlanted+=parseFloat(r.querySelector('.tr-actual')?.value)||0;});if(!totalPlanted)totalPlanted=gn('f-received')||gn('f-doqty');let c1total=0;document.querySelectorAll('#cull1-tbody tr').forEach(r=>{c1total+=parseFloat(r.querySelector('.c1-culled')?.value)||0;});const balTSK=Math.max(0,totalPlanted+pr-grand-c1total);const denom=grand+c1total+balTSK;const rate=denom>0?((grand/denom)*100).toFixed(2)+'%':'0.00%';const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};s('sum-tp-norm',nr.toLocaleString());s('sum-tp-pdt',pr.toLocaleString());s('sum-tp-icu',ir.toLocaleString());s('sum-tp-grand',grand.toLocaleString());s('sum-tp-rate',rate);s('sum-tp-bal',balTSK.toLocaleString());}
+
+// ─── CULL 1 ───
+function makeCull1Row(d){d=d||{};return`<tr><td><input type="text" class="c1-trayno w80" value="${d.trayno||''}"/></td><td><input type="number" class="c1-culled w80" value="${d.culled||''}" oninput="calcCull1Row(this);calcCull1Summary()"/></td><td><input type="text" class="c1-rate w80" value="${d.rate||''}" readonly/></td><td><input type="date" class="c1-date w120" value="${d.date||''}"/></td><td><button type="button" class="btn-sm red" onclick="this.closest('tr').remove();calcCull1Summary()">✕</button></td></tr>`;}
+function calcCull1Row(el){const row=el.closest('tr');const trayno=row.querySelector('.c1-trayno')?.value||'',culled=parseFloat(el.value)||0;let ta=0;document.querySelectorAll('#tray-tbody tr').forEach(r=>{if((r.querySelector('.tr-trayno')?.value||'')==trayno)ta=parseFloat(r.querySelector('.tr-actual')?.value)||0;});const re=row.querySelector('.c1-rate');if(re)re.value=ta>0?((culled/ta)*100).toFixed(2)+'%':'—';}
+function addCull1Row(){document.getElementById('cull1-tbody').insertAdjacentHTML('beforeend',makeCull1Row());}
+function fillCull1Data(td){const tbody=document.getElementById('cull1-tbody');tbody.innerHTML='';if(td&&td.length)td.forEach(d=>tbody.insertAdjacentHTML('beforeend',makeCull1Row(d)));}
+function getCull1Data(){return Array.from(document.querySelectorAll('#cull1-tbody tr')).map(r=>({trayno:r.querySelector('.c1-trayno')?.value||'',culled:parseFloat(r.querySelector('.c1-culled')?.value)||0,rate:r.querySelector('.c1-rate')?.value||'',date:r.querySelector('.c1-date')?.value||''}));}
+function calcCull1Summary(){let total=0;document.querySelectorAll('#cull1-tbody tr').forEach(r=>total+=parseFloat(r.querySelector('.c1-culled')?.value)||0);let totalPlanted=0;document.querySelectorAll('#tray-tbody tr').forEach(r=>{totalPlanted+=parseFloat(r.querySelector('.tr-actual')?.value)||0;});if(!totalPlanted)totalPlanted=gn('f-received')||gn('f-doqty');const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};s('sum-c1-total',total.toLocaleString());s('sum-c1-rate',totalPlanted>0?((total/totalPlanted)*100).toFixed(2)+'%':'—');s('sum-c1-remain',(Math.max(0,totalPlanted-total)).toLocaleString());calcTransplant();}
+
+// ─── CULL 2 ───
+function makeCull2Row(d){d=d||{};
+  // Balance auto = total - dead
+  return`<tr>
+    <td><input type="date" class="c2-date w120" value="${d.date||''}"/></td>
+    <td><input type="text" class="c2-plot w80" value="${d.plot||''}"/></td>
+    <td><input type="number" class="c2-total w100" value="${d.total||''}" oninput="calcCull2Row(this)"/></td>
+    <td><input type="number" class="c2-dead w80" value="${d.dead||''}" oninput="calcCull2Row(this)"/></td>
+    <td><input type="number" class="c2-balance w80" value="${d.balance||''}" readonly/></td>
+    <td><input type="text" class="c2-rate w80" value="${d.rate||''}" readonly/></td>
+    <td><button type="button" class="btn-sm red" onclick="this.closest('tr').remove();calcCull2Summary()">✕</button></td>
+  </tr>`;}
+function calcCull2Row(el){
+  const r=el.closest('tr');
+  const tot=parseFloat(r.querySelector('.c2-total')?.value)||0;
+  const dead=parseFloat(r.querySelector('.c2-dead')?.value)||0;
+  // Balance = total - dead (dead seedlings removed as culled)
+  const balance=Math.max(0,tot-dead);
+  const bEl=r.querySelector('.c2-balance');if(bEl)bEl.value=balance||'';
+  const rEl=r.querySelector('.c2-rate');if(rEl)rEl.value=tot>0?((dead/tot)*100).toFixed(2)+'%':'—';
+  calcCull2Summary();
+}
+function addCull2Row(){document.getElementById('cull2-tbody').insertAdjacentHTML('beforeend',makeCull2Row());}
+function syncPlotsToCull2(){const tbody=document.getElementById('cull2-tbody');tbody.innerHTML='';document.querySelectorAll('#tp-tbody tr').forEach(r=>{const plot=r.querySelector('.tp-plot')?.value||'';const total=(parseFloat(r.querySelector('.tp-norm')?.value)||0)+(parseFloat(r.querySelector('.tp-pdt')?.value)||0)+(parseFloat(r.querySelector('.tp-icu')?.value)||0);if(plot)tbody.insertAdjacentHTML('beforeend',makeCull2Row({plot,total,balance:total}));});toast('Plots synced from Transplanting','success');}
+function fillCull2Data(td){const tbody=document.getElementById('cull2-tbody');tbody.innerHTML='';if(td&&td.length)td.forEach(d=>tbody.insertAdjacentHTML('beforeend',makeCull2Row(d)));}
+function getCull2Data(){return Array.from(document.querySelectorAll('#cull2-tbody tr')).map(r=>({date:r.querySelector('.c2-date')?.value||'',plot:r.querySelector('.c2-plot')?.value||'',total:parseFloat(r.querySelector('.c2-total')?.value)||0,dead:parseFloat(r.querySelector('.c2-dead')?.value)||0,balance:parseFloat(r.querySelector('.c2-balance')?.value)||0,rate:r.querySelector('.c2-rate')?.value||''}));}
+function calcCull2Summary(){let totalDead=0,balance=0,totPlots=0;document.querySelectorAll('#cull2-tbody tr').forEach(r=>{totalDead+=parseFloat(r.querySelector('.c2-dead')?.value)||0;balance+=parseFloat(r.querySelector('.c2-balance')?.value)||0;totPlots+=parseFloat(r.querySelector('.c2-total')?.value)||0;});const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};s('sum-c2-total',totalDead.toLocaleString());s('sum-c2-rate',totPlots>0?((totalDead/totPlots)*100).toFixed(2)+'%':'—');s('sum-c2-balance',balance.toLocaleString());}
+
+// ─── CULL 3 ───
+function makeCull3Row(d){d=d||{};return`<tr>
+    <td><input type="date" class="c3-date w120" value="${d.date||''}"/></td>
+    <td><input type="text" class="c3-plot w80" value="${d.plot||''}"/></td>
+    <td><input type="number" class="c3-total w80" value="${d.total||''}" oninput="calcCull3Row(this)"/></td>
+    <td><input type="text" class="c3-opisdata w100" value="${d.opisdata||''}" placeholder="Balance"/></td>
+    <td><input type="text" class="c3-diadata w100" value="${d.diadata||''}" placeholder="DIA Drone count"/></td>
+    <td><input type="text" class="c3-rateplot w80" value="${d.rateplot||''}" readonly/></td>
+    <td><input type="text" class="c3-ratebatch w80" value="${d.ratebatch||''}" readonly/></td>
+    <td><button type="button" class="btn-sm red" onclick="this.closest('tr').remove();calcCull3Summary()">✕</button></td>
+  </tr>`;}
+function calcCull3Row(el){
+  const r=el.closest('tr');
+  const total=parseFloat(r.querySelector('.c3-total')?.value)||0;
+  const opisdata=parseFloat(r.querySelector('.c3-opisdata')?.value)||0; // this is now "Balance"
+  // culling = total - balance
+  const culled=Math.max(0,total-opisdata);
+  const rp=r.querySelector('.c3-rateplot');
+  if(rp)rp.value=total>0?((culled/total)*100).toFixed(2)+'%':'—';
+  const batchTot=gn('f-received')||gn('f-doqty');
+  const rb=r.querySelector('.c3-ratebatch');
+  if(rb)rb.value=batchTot>0?((culled/batchTot)*100).toFixed(2)+'%':'—';
+}
+function addCull3Row(){document.getElementById('cull3-tbody').insertAdjacentHTML('beforeend',makeCull3Row());}
+function syncPlotsToCull3(){const tbody=document.getElementById('cull3-tbody');tbody.innerHTML='';document.querySelectorAll('#tp-tbody tr').forEach(r=>{const plot=r.querySelector('.tp-plot')?.value||'';const total=(parseFloat(r.querySelector('.tp-norm')?.value)||0)+(parseFloat(r.querySelector('.tp-pdt')?.value)||0)+(parseFloat(r.querySelector('.tp-icu')?.value)||0);if(plot)tbody.insertAdjacentHTML('beforeend',makeCull3Row({plot,total}));});toast('Plots synced','success');}
+function fillCull3Data(td){const tbody=document.getElementById('cull3-tbody');tbody.innerHTML='';if(td&&td.length)td.forEach(d=>tbody.insertAdjacentHTML('beforeend',makeCull3Row(d)));}
+function getCull3Data(){return Array.from(document.querySelectorAll('#cull3-tbody tr')).map(r=>{
+  const total=parseFloat(r.querySelector('.c3-total')?.value)||0;
+  const balance=parseFloat(r.querySelector('.c3-opisdata')?.value)||0;
+  const culled=Math.max(0,total-balance);
+  return{date:r.querySelector('.c3-date')?.value||'',plot:r.querySelector('.c3-plot')?.value||'',total,opisdata:r.querySelector('.c3-opisdata')?.value||'',diadata:r.querySelector('.c3-diadata')?.value||'',culled,rateplot:r.querySelector('.c3-rateplot')?.value||'',ratebatch:r.querySelector('.c3-ratebatch')?.value||''};});}
+function calcCull3Summary(){let total=0,totPlots=0;document.querySelectorAll('#cull3-tbody tr').forEach(r=>{total+=parseFloat(r.querySelector('.c3-culled')?.value)||0;totPlots+=parseFloat(r.querySelector('.c3-total')?.value)||0;});const batchTot=gn('f-received')||gn('f-doqty');const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};s('sum-c3-total',total.toLocaleString());s('sum-c3-rate',batchTot>0?((total/batchTot)*100).toFixed(2)+'%':'—');s('sum-c3-remain',(Math.max(0,totPlots-total)).toLocaleString());}
+
+// ─── TRANSFER ───
+function makeTransferRow(d){d=d||{};return`<tr><td><input type="text" class="tr-origplot w100" value="${d.origplot||''}"/></td><td><input type="text" class="tr-toplot w100" value="${d.toplot||''}"/></td><td><input type="number" class="tr-qty w80" value="${d.qty||''}" oninput="calcTransferSummary()"/></td><td><input type="date" class="tr-date w120" value="${d.date||''}"/></td><td><input type="text" class="tr-sin w80" value="${d.sin||''}"/></td><td><input type="number" class="tr-drone w80" value="${d.drone||''}"/></td><td><button type="button" class="btn-sm red" onclick="this.closest('tr').remove();calcTransferSummary()">✕</button></td></tr>`;}
+function addTransferRow(){document.getElementById('transfer-tbody').insertAdjacentHTML('beforeend',makeTransferRow());}
+function fillTransferData(td){const tbody=document.getElementById('transfer-tbody');tbody.innerHTML='';if(td&&td.length){td.forEach(d=>tbody.insertAdjacentHTML('beforeend',makeTransferRow(d)));}else addTransferRow();}
+function getTransferData(){return Array.from(document.querySelectorAll('#transfer-tbody tr')).map(r=>({origplot:r.querySelector('.tr-origplot')?.value||'',toplot:r.querySelector('.tr-toplot')?.value||'',qty:parseFloat(r.querySelector('.tr-qty')?.value)||0,date:r.querySelector('.tr-date')?.value||'',sin:r.querySelector('.tr-sin')?.value||'',drone:parseFloat(r.querySelector('.tr-drone')?.value)||0}));}
+function calcTransferSummary(){let total=0;document.querySelectorAll('.tr-qty').forEach(i=>total+=parseFloat(i.value)||0);const batchTot=gn('f-received')||gn('f-doqty');const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};s('sum-tr-total',total.toLocaleString());s('sum-tr-rate',batchTot>0?((total/batchTot)*100).toFixed(2)+'%':'—');}
+
+// ─── DETAIL VIEW ───
+function viewDetail(id){
+  const b=batches.find(x=>x.id===id);if(!b)return;
+  detailId=id;
+  document.getElementById('detail-title').textContent='Batch — '+b.id;
+  document.getElementById('detail-edit-btn').onclick=()=>{closeDetailModal();editBatch(id);};
+  const tot=b.received||b.doqty||0;const sv=survRate(b);
+  const c1total=(b.cull1Data||[]).reduce((s,r)=>s+(parseFloat(r.culled)||0),0);
+  const c2total=(b.cull2Data||[]).reduce((s,r)=>s+(parseFloat(r.culled)||0),0);
+  const c3total=(b.cull3Data||[]).reduce((s,r)=>s+(parseFloat(r.culled)||0),0);
+  const totTrans=(b.tpData||[]).reduce((s,r)=>s+(r.norm||0)+(r.pdt||0)+(r.icu||0),0);
+  const d=daysUntil(b.transferdate);const dm=daysUntil(b.maturitydate);
+  let alts='';
+  if(sv<85&&tot>0)alts+=`<div class="alert danger">🔴 Survival rate (${sv.toFixed(1)}%) below threshold.</div>`;
+  if(d!==null&&d<=30&&d>=0)alts+=`<div class="alert warn">⏰ Transfer date in ${d} days.</div>`;
+  if(dm!==null&&dm<=30&&dm>=0)alts+=`<div class="alert warn">🌴 Maturity / ready for sale in ${dm} days!</div>`;
+  if(!alts)alts=`<div class="alert success">✅ All metrics within range.</div>`;
+  const tx=treatments.filter(t=>t.batchId===id);
+  document.getElementById('detail-body').innerHTML=`
+    <div class="detail-header"><h2>${b.id}</h2>
+      <div class="detail-meta">
+        <div class="detail-meta-item"><span>Brand</span><strong>${b.brand||'—'}</strong></div>
+        <div class="detail-meta-item"><span>Supplier</span><strong>${b.supplier||'—'}</strong></div>
+        <div class="detail-meta-item"><span>Planted</span><strong>${b.dateplanted||'—'}</strong></div>
+        <div class="detail-meta-item"><span>Stage</span><strong>${b.stage}</strong></div>
+        <div class="detail-meta-item"><span>Maturity Date</span><strong style="color:var(--teal)">${b.maturitydate||'—'}</strong></div>
+        ${b.lotno?`<div class="detail-meta-item"><span>Tray</span><strong>${b.lotno}</strong></div>`:''}
+      </div>
+    </div>
+    ${alts}
+    <div class="detail-grid">
+      <div class="detail-stat"><div class="val">${fmt(tot)}</div><div class="lbl">Seeds Received</div><div class="sub">D/O: ${fmt(b.doqty)} + FOC: ${fmt(b.focqty)}</div></div>
+      <div class="detail-stat"><div class="val">${fmt(totTrans)}</div><div class="lbl">Transplanted</div><div class="sub">${pct(totTrans,tot)}</div></div>
+      <div class="detail-stat"><div class="val">${fmt(c1total+c2total+c3total)}</div><div class="lbl">Total Culled</div><div class="sub">C1:${fmt(c1total)} C2:${fmt(c2total)} C3:${fmt(c3total)}</div></div>
+      <div class="detail-stat"><div class="val">${sv.toFixed(1)}%</div><div class="lbl">Survival Rate</div><div class="sub">${sv>=90?'✅ On target':'⚠️ Below target'}</div></div>
+    </div>
+    ${b.traysData&&b.traysData.length?`<div class="sec-label">📦 Tray Breakdown</div><div style="overflow-x:auto"><table class="data-table" style="margin-bottom:1.1rem"><thead><tr><th>Tray</th><th>Type</th><th>Planted</th><th>Empty</th><th>Actual</th></tr></thead><tbody>${b.traysData.map(t=>`<tr><td>${t.trayno||'—'}</td><td>${t.type||'Normal'}</td><td>${fmt(t.planted)}</td><td>${t.empty||0}</td><td>${fmt(t.actual)}</td></tr>`).join('')}</tbody></table></div>`:''}
+    ${b.tpData&&b.tpData.length?`<div class="sec-label">🌿 Transplanting</div><div style="overflow-x:auto"><table class="data-table" style="margin-bottom:1.1rem"><thead><tr><th>Tray</th><th>Plot</th><th>Date</th><th>Biasa</th><th>PDT</th><th>ICU</th><th>SIN</th></tr></thead><tbody>${b.tpData.map(r=>`<tr><td>${r.tray||'—'}</td><td>${r.plot||'—'}</td><td>${r.date||'—'}</td><td>${fmt(r.norm)}</td><td>${fmt(r.pdt)}</td><td>${fmt(r.icu)}</td><td>${r.sin||'—'}</td></tr>`).join('')}</tbody></table></div>`:''}
+    ${b.cull1Data&&b.cull1Data.length?`<div class="sec-label" style="border-left:4px solid var(--amber);padding-left:.6rem">✂️ 1st Culling</div><div style="overflow-x:auto"><table class="data-table" style="margin-bottom:1.1rem"><thead><tr><th>Tray</th><th>Culled</th><th>Rate</th><th>Date</th></tr></thead><tbody>${b.cull1Data.map(r=>`<tr><td>${r.trayno}</td><td>${fmt(r.culled)}</td><td>${r.rate||'—'}</td><td>${r.date||'—'}</td></tr>`).join('')}</tbody></table></div>`:''}
+    ${b.cull2Data&&b.cull2Data.length?`<div class="sec-label" style="border-left:4px solid #e06020;padding-left:.6rem">✂️ 2nd Culling</div><div style="overflow-x:auto"><table class="data-table" style="margin-bottom:1.1rem"><thead><tr><th>Date</th><th>Plot</th><th>Total</th><th>Dead</th><th>Balance</th><th>Cull Rate %</th></tr></thead><tbody>${b.cull2Data.map(r=>`<tr><td>${r.date||'—'}</td><td>${r.plot}</td><td>${fmt(r.total)}</td><td>${fmt(r.dead||r.culled)}</td><td>${fmt(r.balance)}</td><td>${r.rate||'—'}</td></tr>`).join('')}</tbody></table></div>`:''}
+    ${b.cull3Data&&b.cull3Data.length?`<div class="sec-label" style="border-left:4px solid var(--rust);padding-left:.6rem">✂️ 3rd Culling</div><div style="overflow-x:auto"><table class="data-table" style="margin-bottom:1.1rem"><thead><tr><th>Date</th><th>Plot</th><th>Total</th><th>Balance</th><th>DIA Drone</th><th>Culled (calc)</th><th>Rate/Plot</th><th>Rate/Batch</th></tr></thead><tbody>${b.cull3Data.map(r=>{const culled=Math.max(0,(r.total||0)-(parseFloat(r.opisdata)||0));return`<tr><td>${r.date||'—'}</td><td>${r.plot}</td><td>${fmt(r.total)}</td><td>${r.opisdata||'—'}</td><td>${r.diadata||'—'}</td><td>${fmt(culled)}</td><td>${r.rateplot||'—'}</td><td>${r.ratebatch||'—'}</td></tr>`;}).join('')}</tbody></table></div>`:''}
+    ${b.transferData&&b.transferData.length?`<div class="sec-label">🚛 Transfer</div><div style="overflow-x:auto"><table class="data-table" style="margin-bottom:1.1rem"><thead><tr><th>From</th><th>To</th><th>Qty</th><th>Date</th><th>SIN</th><th>Drone</th></tr></thead><tbody>${b.transferData.map(r=>`<tr><td>${r.origplot||'—'}</td><td>${r.toplot||'—'}</td><td>${fmt(r.qty)}</td><td>${r.date||'—'}</td><td>${r.sin||'—'}</td><td>${r.drone||0}</td></tr>`).join('')}</tbody></table></div>`:''}
+    ${(b.rain1||b.rain2||b.rain3)?`<div class="sec-label">🌧️ Rainfall</div><div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem"><div class="tag">Month 1: ${b.rain1||0}mm</div><div class="tag">Month 2: ${b.rain2||0}mm</div><div class="tag">Month 3: ${b.rain3||0}mm</div></div>`:''}
+    <div class="sec-label">🧪 Treatment Log <button class="btn-sm" onclick="addTreatment('${id}')" style="float:right">+ Add</button></div>
+    ${tx.length?`<div class="treatment-list">${tx.map(t=>`<div class="treatment-item"><div class="ti-date">${t.date}</div><div style="flex:1"><strong style="font-size:.8rem">${t.type} — ${t.product||''}</strong><div style="font-size:.7rem;color:#aaa">${t.notes||''}</div></div><div class="tag">${t.qty||''}</div><button class="btn-sm red" onclick="delTreatment(${t.id})">✕</button></div>`).join('')}</div>`:'<p style="color:#bbb;font-size:.8rem">No treatments recorded.</p>'}
+    ${b.notes?`<div class="sec-label" style="margin-top:1rem">📝 Notes</div><div style="background:var(--cream);border-radius:8px;padding:.85rem;font-size:.84rem;border:1px solid var(--sand)">${b.notes}</div>`:''}`;
+  document.getElementById('detail-modal').classList.add('open');
+}
+function closeDetailModal(){document.getElementById('detail-modal').classList.remove('open');closeDlMenu();}
+function addTreatment(batchId){const date=prompt('Date (YYYY-MM-DD):',new Date().toISOString().split('T')[0]);if(!date)return;const type=prompt('Type:','Fertilizer');if(!type)return;const product=prompt('Product:','');const qty=prompt('Qty:','');const notes=prompt('Notes:','');treatments.push({id:Date.now(),batchId,date,type,product,qty,notes});saveTreat();viewDetail(batchId);toast('Treatment added','success');}
+function delTreatment(id){treatments=treatments.filter(t=>t.id!==id);saveTreat();if(detailId)viewDetail(detailId);}
+
+// ─── DOWNLOAD ───
+function toggleDlMenu(){document.getElementById('dl-dropdown').classList.toggle('open');}
+function closeDlMenu(){document.getElementById('dl-dropdown')?.classList.remove('open');}
+document.addEventListener('click',e=>{if(!document.getElementById('dl-menu')?.contains(e.target))closeDlMenu();});
+function downloadReport(type){
+  const b=batches.find(x=>x.id===detailId);if(!b)return;closeDlMenu();
+  const tot=b.received||b.doqty||0;
+  const c1total=(b.cull1Data||[]).reduce((s,r)=>s+(parseFloat(r.culled)||0),0);
+  const c2total=(b.cull2Data||[]).reduce((s,r)=>s+(parseFloat(r.dead||r.culled)||0),0);
+  // c3 culled = total - balance(opisdata)
+  const c3total=(b.cull3Data||[]).reduce((s,r)=>{const t=parseFloat(r.total)||0;const bal=parseFloat(r.opisdata)||0;return s+Math.max(0,t-bal);},0);
+  const totTrans=(b.tpData||[]).reduce((s,r)=>s+(r.norm||0)+(r.pdt||0)+(r.icu||0),0);
+  const sv=survRate(b);
+  // Batch culling rate = (1st culled + 3rd culled) / total transplanted
+  const batchCullRate=totTrans>0?((c1total+c3total)/totTrans*100):0;
+  const titles={full:'Full Batch Report',tray:'Tray Planting Report',transplant:'Transplanting Report',cull1:'1st Culling Report',cull2:'2nd Culling Report',cull3:'3rd Culling Report',transfer:'Transfer Report'};
+
+  const css=`<style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Arial,sans-serif;margin:1.5rem;color:#1a150d;font-size:13px;}
+    h1{color:#3d2610;font-size:1.3rem;margin-bottom:.4rem;}
+    h2{color:#3d2610;font-size:1rem;margin:1.2rem 0 .5rem;border-bottom:2px solid #e8dcc8;padding-bottom:.35rem;}
+    .company{font-size:.75rem;color:#8a7a68;margin-bottom:.3rem;}
+    .hgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1.2rem;}
+    .hgrid.g4{grid-template-columns:repeat(4,1fr);}
+    .ibox{background:#f8f4ec;padding:.7rem;border-radius:6px;border:1px solid #e8dcc8;}
+    .ilabel{font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:#8a7a68;margin-bottom:.15rem;}
+    .ival{font-size:.95rem;font-weight:700;color:#3d2610;}
+    .ival.green{color:#4a7a2e;} .ival.red{color:#a83020;} .ival.amber{color:#c07820;}
+    table{width:100%;border-collapse:collapse;margin:.5rem 0 1rem;}
+    th{background:#f8f4ec;padding:.42rem .65rem;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#5c3d1e;border-bottom:2px solid #e8dcc8;}
+    td{padding:.38rem .65rem;border-bottom:1px solid #e8dcc8;font-size:.82rem;}
+    tr:last-child td{border-bottom:none;}
+    .rate-ok{color:#4a7a2e;font-weight:700;} .rate-warn{color:#c07820;font-weight:700;} .rate-bad{color:#a83020;font-weight:700;}
+    .alert-box{padding:.5rem .8rem;border-radius:6px;margin-bottom:.7rem;font-size:.82rem;}
+    .alert-warn{background:rgba(192,120,32,.1);border:1px solid rgba(192,120,32,.3);color:#7a4a10;}
+    .alert-danger{background:rgba(168,48,32,.1);border:1px solid rgba(168,48,32,.3);color:#7a1810;}
+    .alert-ok{background:rgba(74,122,46,.08);border:1px solid rgba(74,122,46,.2);color:#2a5010;}
+    .chart-container{margin:.5rem 0 1rem;border:1px solid #e8dcc8;border-radius:8px;padding:.8rem;}
+    .chart-title{font-size:.8rem;font-weight:700;color:#3d2610;margin-bottom:.5rem;}
+    .bar-chart{display:flex;align-items:flex-end;gap:4px;height:80px;padding-bottom:4px;}
+    .bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;gap:3px;}
+    .bar-label{font-size:.6rem;color:#8a7a68;text-align:center;}
+    .bar-val{font-size:.6rem;color:#4a7a2e;font-weight:700;}
+    .bar{background:#6aa83c;border-radius:3px 3px 0 0;min-height:2px;}
+    .bar.amber{background:#c07820;} .bar.red{background:#a83020;}
+    footer{margin-top:1.5rem;padding-top:.8rem;border-top:1px solid #e8dcc8;font-size:.68rem;color:#aaa;}
+    @media print{body{margin:.8rem;}}
+  </style>`;
+
+  let content=`<html><head><title>${titles[type]} — ${b.id}</title>${css}</head><body>`;
+  content+=`<div class="company">Mega Jutamas Sdn Bhd | MJM Nursery | Generated: ${new Date().toLocaleString('en-MY')}</div>`;
+  content+=`<h1>${titles[type]}</h1>`;
+
+  // ── HEADER INFO ──
+  const doqty=b.doqty||0, focqty=b.focqty||0, totalReceived=doqty+focqty, dmg=b.dmgsite||0;
+  const receiveRate=totalReceived>0?((b.received||0)/totalReceived*100):0;
+  const transPlanted=(b.traysData||[]).reduce((s,r)=>s+(r.actual||0),0);
+  const plantedRate=b.received>0?(transPlanted/b.received*100):0;
+  content+=`<div class="hgrid g4">
+    <div class="ibox"><div class="ilabel">Batch No.</div><div class="ival">${b.id}</div></div>
+    <div class="ibox"><div class="ilabel">Seed Brand</div><div class="ival">${b.brand||'—'}</div></div>
+    <div class="ibox"><div class="ilabel">Supplier</div><div class="ival">${b.supplier||'—'}</div></div>
+    <div class="ibox"><div class="ilabel">Stage</div><div class="ival">${b.stage}</div></div>
+    <div class="ibox"><div class="ilabel">Date Planted</div><div class="ival">${b.dateplanted||'—'}</div></div>
+    <div class="ibox"><div class="ilabel">Transfer Date</div><div class="ival">${b.transferdate||'—'}</div></div>
+    <div class="ibox"><div class="ilabel">Maturity Date</div><div class="ival">${b.maturitydate||'—'}</div></div>
+    <div class="ibox"><div class="ilabel">Survival Rate</div><div class="ival ${sv>=90?'green':sv>=75?'amber':'red'}">${sv.toFixed(2)}%</div></div>
+  </div>`;
+
+  // ── SEED RECEIVED SUMMARY (all reports) ──
+  content+=`<h2>📦 Seed Receipt Summary</h2>
+  <div class="hgrid">
+    <div class="ibox"><div class="ilabel">D/O Quantity</div><div class="ival">${fmt(doqty)}</div></div>
+    <div class="ibox"><div class="ilabel">FOC (${b.focpct||0}%)</div><div class="ival">+${fmt(focqty)}</div></div>
+    <div class="ibox"><div class="ilabel">Total Expected</div><div class="ival">${fmt(totalReceived)}</div></div>
+    <div class="ibox"><div class="ilabel">Seed Damage</div><div class="ival ${dmg/totalReceived>0.05?'red':'green'}">−${fmt(dmg)}</div></div>
+    <div class="ibox"><div class="ilabel">Actual Received</div><div class="ival green">${fmt(b.received||0)}</div></div>
+    <div class="ibox"><div class="ilabel">Receive Rate</div><div class="ival ${receiveRate>=95?'green':'red'}">${receiveRate.toFixed(2)}% ${receiveRate>=95?'✓':'⚠'}</div></div>
+  </div>
+  ${receiveRate<95?'<div class="alert-box alert-danger">⚠ Actual receive rate ('+receiveRate.toFixed(2)+'%) is below 95% target. Check seed delivery.</div>':'<div class="alert-box alert-ok">✅ Seed receive rate meets target.</div>'}`;
+
+  // ── TRAY PLANTING ──
+  if(type==='full'||type==='tray'){
+    content+=`<h2>🌱 Tray Planting Record (TSK Pre-Nursery)</h2>
+    <table><thead><tr><th>Tray No.</th><th>Type</th><th>Seeds Planted</th><th>Empty Holes</th><th>Actual Planted</th></tr></thead>
+    <tbody>${(b.traysData||[]).map(t=>`<tr><td>${t.trayno}</td><td>${t.type}</td><td>${fmt(t.planted)}</td><td>${t.empty}</td><td>${fmt(t.actual)}</td></tr>`).join('')||'<tr><td colspan="5" style="color:#bbb;text-align:center">No data</td></tr>'}
+    <tr style="font-weight:700;background:#f8f4ec"><td colspan="2">Total</td><td>${fmt((b.traysData||[]).reduce((s,r)=>s+(r.planted||0),0))}</td><td>${fmt((b.traysData||[]).reduce((s,r)=>s+(r.empty||0),0))}</td><td>${fmt(transPlanted)}</td></tr>
+    </tbody></table>
+    <div class="hgrid">
+      <div class="ibox"><div class="ilabel">Total Planted</div><div class="ival">${fmt(transPlanted)}</div></div>
+      <div class="ibox"><div class="ilabel">Actual Planted Rate</div><div class="ival ${plantedRate>=95?'green':'red'}">${plantedRate.toFixed(2)}% ${plantedRate>=95?'✓':'⚠'}</div></div>
+      <div class="ibox"><div class="ilabel">Damage Rate (HQ)</div><div class="ival ${b.dmghq/b.received>0.05?'red':'green'}">${b.received?((b.dmghq||0)/b.received*100).toFixed(2):'0.00'}%</div></div>
+    </div>`;
+    // Tray chart
+    if(b.traysData&&b.traysData.length){
+      const maxP=Math.max(...b.traysData.map(t=>t.actual||0),1);
+      content+=`<div class="chart-container"><div class="chart-title">📊 Actual Seedlings per Tray</div>
+      <div class="bar-chart">${b.traysData.map(t=>`<div class="bar-wrap"><div class="bar-val">${(t.actual||0).toLocaleString()}</div><div class="bar" style="height:${Math.max(4,((t.actual||0)/maxP)*68)}px;width:100%"></div><div class="bar-label">${t.trayno}</div></div>`).join('')}</div></div>`;
+    }
+  }
+
+  // ── TRANSPLANTING ──
+  if(type==='full'||type==='transplant'){
+    let cumulative=0;
+    content+=`<h2>🌿 Transplanting Record (TSK → TSB Main Nursery)</h2>
+    <table><thead><tr><th>Tray</th><th>Plot ID</th><th>Date</th><th>Biasa (n)</th><th>PDT (p)</th><th>ICU</th><th>Plot Total</th><th>Cumulative</th><th>Rate (%)</th><th>SIN No.</th></tr></thead>
+    <tbody>${(b.tpData||[]).map(r=>{cumulative+=(r.norm||0)+(r.pdt||0)+(r.icu||0);const plotTot=(r.norm||0)+(r.pdt||0)+(r.icu||0);const cumRate=transPlanted>0?(cumulative/transPlanted*100).toFixed(2)+'%':'—';return`<tr><td>${r.tray}</td><td>${r.plot}</td><td>${r.date}</td><td>${fmt(r.norm)}</td><td>${fmt(r.pdt)}</td><td>${fmt(r.icu)}</td><td>${fmt(plotTot)}</td><td>${fmt(cumulative)}</td><td class="rate-ok">${cumRate}</td><td>${r.sin||'—'}</td></tr>`;}).join('')||'<tr><td colspan="10" style="color:#bbb;text-align:center">No data</td></tr>'}
+    <tr style="font-weight:700;background:#f8f4ec"><td colspan="3">Grand Total</td><td>${fmt((b.tpData||[]).reduce((s,r)=>s+(r.norm||0),0))}</td><td>${fmt((b.tpData||[]).reduce((s,r)=>s+(r.pdt||0),0))}</td><td>${fmt((b.tpData||[]).reduce((s,r)=>s+(r.icu||0),0))}</td><td colspan="2">${fmt(totTrans)}</td><td class="rate-ok">${transPlanted>0?((totTrans/transPlanted)*100).toFixed(2)+'%':'—'}</td><td></td></tr>
+    </tbody></table>`;
+    // Transplanting chart
+    if(b.tpData&&b.tpData.length){
+      const maxQ=Math.max(...b.tpData.map(r=>(r.norm||0)+(r.pdt||0)+(r.icu||0)),1);
+      const bal=Math.max(0,transPlanted-totTrans);
+      content+=`<div class="chart-container"><div class="chart-title">📊 Transplanting Quantity by Plot vs Balance in TSK</div>
+      <div class="bar-chart">
+        ${b.tpData.map(r=>{const q=(r.norm||0)+(r.pdt||0)+(r.icu||0);return`<div class="bar-wrap"><div class="bar-val">${q.toLocaleString()}</div><div class="bar" style="height:${Math.max(4,(q/maxQ)*68)}px;width:100%"></div><div class="bar-label">${r.plot}</div></div>`}).join('')}
+        <div class="bar-wrap"><div class="bar-val">${bal.toLocaleString()}</div><div class="bar amber" style="height:${Math.max(4,(bal/Math.max(maxQ,bal))*68)}px;width:100%"></div><div class="bar-label">Balance in TSK</div></div>
+      </div></div>
+      <div class="hgrid">
+        <div class="ibox"><div class="ilabel">Total Transplanted</div><div class="ival green">${fmt(totTrans)}</div></div>
+        <div class="ibox"><div class="ilabel">Cumulative Trans. Rate</div><div class="ival ${transPlanted>0&&(totTrans/transPlanted)>=0.9?'green':'amber'}">${transPlanted>0?((totTrans/transPlanted)*100).toFixed(2)+'%':'—'} ${transPlanted>0&&(totTrans/transPlanted)>=0.9?'✓':''}</div></div>
+        <div class="ibox"><div class="ilabel">Balance in TSK</div><div class="ival amber">${fmt(bal)}</div></div>
+      </div>`;
+    }
+  }
+
+  // ── 1ST CULLING ──
+  if(type==='full'||type==='cull1'){
+    const c1Rate=totTrans>0?(c1total/totTrans*100):0;
+    content+=`<h2>✂️ 1st Culling Report (upon transplanting)</h2>
+    ${c1Rate>10?'<div class="alert-box alert-danger">⚠ 1st culling rate ('+c1Rate.toFixed(2)+'%) exceeds 10% target. Investigate seedling quality.</div>':'<div class="alert-box alert-ok">✅ 1st culling rate within target.</div>'}
+    <table><thead><tr><th>Tray No.</th><th>Culled Qty</th><th>Culling Rate (%)</th><th>Date Culled</th></tr></thead>
+    <tbody>${(b.cull1Data||[]).map(r=>`<tr><td>${r.trayno}</td><td>${fmt(r.culled)}</td><td class="${parseFloat(r.rate)>10?'rate-bad':'rate-ok'}">${parseFloat(r.rate||0).toFixed(2)}%</td><td>${r.date||'—'}</td></tr>`).join('')||'<tr><td colspan="4" style="color:#bbb;text-align:center">No data</td></tr>'}
+    <tr style="font-weight:700;background:#f8f4ec"><td>Total</td><td>${fmt(c1total)}</td><td class="${c1Rate>10?'rate-bad':'rate-ok'}">${c1Rate.toFixed(2)}%</td><td></td></tr>
+    </tbody></table>`;
+  }
+
+  // ── 2ND CULLING ──
+  if(type==='full'||type==='cull2'){
+    const c2Rate=totTrans>0?(c2total/totTrans*100):0;
+    content+=`<h2>✂️ 2nd Culling Report</h2>
+    ${c2Rate>10?'<div class="alert-box alert-warn">⚠ 2nd culling rate ('+c2Rate.toFixed(2)+'%) exceeds 10%.</div>':'<div class="alert-box alert-ok">✅ 2nd culling rate within target.</div>'}
+    <table><thead><tr><th>Date</th><th>Plot ID</th><th>Total Seedlings</th><th>Dead Qty</th><th>Balance</th><th>Culling Rate (%)</th></tr></thead>
+    <tbody>${(b.cull2Data||[]).map(r=>`<tr><td>${r.date||'—'}</td><td>${r.plot}</td><td>${fmt(r.total)}</td><td>${fmt(r.dead||r.culled)}</td><td>${fmt(r.balance)}</td><td class="${parseFloat(r.rate||0)>10?'rate-bad':'rate-ok'}">${parseFloat(r.rate||0).toFixed(2)}%</td></tr>`).join('')||'<tr><td colspan="6" style="color:#bbb;text-align:center">No data</td></tr>'}
+    <tr style="font-weight:700;background:#f8f4ec"><td colspan="2">Total</td><td>${fmt((b.cull2Data||[]).reduce((s,r)=>s+(r.total||0),0))}</td><td>${fmt(c2total)}</td><td>${fmt((b.cull2Data||[]).reduce((s,r)=>s+(r.balance||0),0))}</td><td class="${c2Rate>10?'rate-bad':'rate-ok'}">${c2Rate.toFixed(2)}%</td></tr>
+    </tbody></table>`;
+  }
+
+  // ── 3RD CULLING ──
+  if(type==='full'||type==='cull3'){
+    const c3Rate=totTrans>0?(c3total/totTrans*100):0;
+    content+=`<h2>✂️ 3rd Culling Report</h2>
+    <table><thead><tr><th>Date</th><th>Plot ID</th><th>Total Seedlings</th><th>Balance</th><th>DIA Drone</th><th>Culled (Total−Balance)</th><th>Rate/Plot (%)</th><th>Rate/Batch (%)</th></tr></thead>
+    <tbody>${(b.cull3Data||[]).map(r=>{const culled=Math.max(0,(r.total||0)-(parseFloat(r.opisdata)||0));return`<tr><td>${r.date||'—'}</td><td>${r.plot}</td><td>${fmt(r.total)}</td><td>${r.opisdata||'—'}</td><td>${r.diadata||'—'}</td><td>${fmt(culled)}</td><td class="${parseFloat(r.rateplot||0)>10?'rate-bad':'rate-ok'}">${parseFloat(r.rateplot||0).toFixed(2)}%</td><td class="rate-ok">${parseFloat(r.ratebatch||0).toFixed(2)}%</td></tr>`;}).join('')||'<tr><td colspan="8" style="color:#bbb;text-align:center">No data</td></tr>'}
+    <tr style="font-weight:700;background:#f8f4ec"><td colspan="5">Total Culled</td><td>${fmt(c3total)}</td><td class="${c3Rate>10?'rate-bad':'rate-ok'}">${c3Rate.toFixed(2)}%</td><td></td></tr>
+    </tbody></table>`;
+  }
+
+  // ── BATCH CULLING RATE SUMMARY ──
+  if(type==='full'||type==='cull1'||type==='cull3'){
+    content+=`<h2>📊 Batch Culling Rate Summary</h2>
+    <div class="hgrid">
+      <div class="ibox"><div class="ilabel">1st Culling</div><div class="ival ${totTrans>0&&c1total/totTrans>0.1?'red':'green'}">${fmt(c1total)} (${totTrans>0?(c1total/totTrans*100).toFixed(2):'0.00'}%)</div></div>
+      <div class="ibox"><div class="ilabel">3rd Culling</div><div class="ival">${fmt(c3total)} (${totTrans>0?(c3total/totTrans*100).toFixed(2):'0.00'}%)</div></div>
+      <div class="ibox"><div class="ilabel">Batch Cull Rate (1st+3rd) ÷ Transplanted</div><div class="ival ${batchCullRate>20?'red':batchCullRate>15?'amber':'green'}">${batchCullRate.toFixed(2)}% ${batchCullRate<=20?'✓ ≤20%':'⚠ >20% ALERT'}</div></div>
+    </div>
+    ${batchCullRate>20?'<div class="alert-box alert-danger">🔴 Batch culling rate ('+batchCullRate.toFixed(2)+'%) exceeds the 20% maximum. Review seedling quality and nursery management.</div>':'<div class="alert-box alert-ok">✅ Batch culling rate ('+batchCullRate.toFixed(2)+'%) is within the 20% maximum.</div>'}
+    <div class="chart-container"><div class="chart-title">📊 Culling Breakdown Chart</div>
+    <div class="bar-chart" style="height:90px">
+      ${[{l:'1st Cull',v:c1total,cls:''},{l:'2nd Cull',v:c2total,cls:'amber'},{l:'3rd Cull',v:c3total,cls:'red'},{l:'Surviving',v:Math.max(0,totTrans-c1total-c2total-c3total),cls:''}].map(item=>{
+        const maxV=Math.max(c1total,c2total,c3total,totTrans-c1total-c2total-c3total,1);
+        return`<div class="bar-wrap"><div class="bar-val">${item.v.toLocaleString()}</div><div class="bar ${item.cls}" style="height:${Math.max(3,(item.v/maxV)*72)}px;width:100%"></div><div class="bar-label">${item.l}</div></div>`;
+      }).join('')}
+    </div></div>`;
+  }
+
+  // ── TRANSFER ──
+  if(type==='full'||type==='transfer'){
+    const totTransferred=(b.transferData||[]).reduce((s,r)=>s+(r.qty||0),0);
+    content+=`<h2>🚛 Transfer Records (to Plot-R / MJM Store)</h2>
+    <table><thead><tr><th>From Plot</th><th>To Plot-R / Store</th><th>Quantity Transferred</th><th>Date</th><th>SIN No.</th><th>Drone Count</th></tr></thead>
+    <tbody>${(b.transferData||[]).map(r=>`<tr><td>${r.origplot}</td><td>${r.toplot}</td><td>${fmt(r.qty)}</td><td>${r.date}</td><td>${r.sin}</td><td>${r.drone||0}</td></tr>`).join('')||'<tr><td colspan="6" style="color:#bbb;text-align:center">No data</td></tr>'}
+    <tr style="font-weight:700;background:#f8f4ec"><td colspan="2">Total Transferred</td><td>${fmt(totTransferred)}</td><td colspan="3">Rate: ${totTrans>0?(totTransferred/totTrans*100).toFixed(2)+'%':'—'}</td></tr>
+    </tbody></table>`;
+  }
+
+  content+=`<footer>MJM Nursery — Mega Jutamas Sdn Bhd | ${titles[type]} for Batch ${b.id} | Printed: ${new Date().toLocaleString('en-MY')}</footer></body></html>`;
+  const win=window.open('','_blank');win.document.write(content);win.document.close();
+  setTimeout(()=>{win.focus();win.print();},500);
+  toast('Report opened for printing ✓','success');
+}
+
+// ─── REPORTS ───
+function renderReports(){
+  // Summary
+  const totSeeds=batches.reduce((s,b)=>s+(b.received||b.doqty||0),0);
+  const totTrans=batches.reduce((s,b)=>s+(b.tpData||[]).reduce((x,r)=>x+(r.norm||0)+(r.pdt||0)+(r.icu||0),0),0);
+  const totC1=batches.reduce((s,b)=>s+(b.cull1Data||[]).reduce((x,r)=>x+(parseFloat(r.culled)||0),0),0);
+  const totC2=batches.reduce((s,b)=>s+(b.cull2Data||[]).reduce((x,r)=>x+(parseFloat(r.dead||r.culled)||0),0),0);
+  const totC3=batches.reduce((s,b)=>s+(b.cull3Data||[]).reduce((x,r)=>x+Math.max(0,(r.total||0)-(parseFloat(r.opisdata)||0)),0),0);
+  const totCulled=totC1+totC2+totC3;const sv=totSeeds?((totSeeds-totCulled)/totSeeds*100):0;
+  document.getElementById('rt-summary').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.9rem;margin-bottom:1.5rem">
+      <div class="stat-card sc-green"><div class="stat-icon">🌴</div><div class="stat-value">${batches.length}</div><div class="stat-label">Total Batches</div></div>
+      <div class="stat-card sc-amber"><div class="stat-icon">🌱</div><div class="stat-value">${fmt(totSeeds)}</div><div class="stat-label">Total Seeds</div></div>
+      <div class="stat-card sc-teal"><div class="stat-icon">🌿</div><div class="stat-value">${fmt(totTrans)}</div><div class="stat-label">Transplanted</div><div class="stat-sub">${pct(totTrans,totSeeds)}</div></div>
+      <div class="stat-card sc-rust"><div class="stat-icon">✂️</div><div class="stat-value">${fmt(totCulled)}</div><div class="stat-label">Total Culled</div><div class="stat-sub">${pct(totCulled,totSeeds)}</div></div>
+      <div class="stat-card sc-sky"><div class="stat-icon">🎯</div><div class="stat-value">${sv.toFixed(1)}%</div><div class="stat-label">Overall Survival</div></div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Batch</th><th>Brand</th><th>Seeds</th><th>Transplanted</th><th>Rate</th><th>C1</th><th>C2</th><th>C3</th><th>Survival</th><th>Maturity</th><th>Stage</th></tr></thead>
+    <tbody>${batches.map(b=>{const s=b.received||b.doqty||0;const tr=(b.tpData||[]).reduce((x,r)=>x+(r.norm||0)+(r.pdt||0)+(r.icu||0),0);const c1=(b.cull1Data||[]).reduce((x,r)=>x+(parseFloat(r.culled)||0),0);const c2=(b.cull2Data||[]).reduce((x,r)=>x+(parseFloat(r.dead||r.culled)||0),0);const c3=(b.cull3Data||[]).reduce((x,r)=>x+Math.max(0,(r.total||0)-(parseFloat(r.opisdata)||0)),0);const sv2=survRate(b);const dm=daysUntil(b.maturitydate);const ml=b.maturitydate?(dm<0?'<span style="color:var(--teal)">✓ Mature</span>':dm<=60?`<span style="color:var(--amber)">${dm}d</span>`:`<span style="color:#aaa">${b.maturitydate}</span>`):'—';
+      return`<tr><td class="batch-id">${b.id}</td><td>${b.brand||'—'}</td><td>${fmt(s)}</td><td>${fmt(tr)}</td><td>${pct(tr,s)}</td><td>${fmt(c1)}</td><td>${fmt(c2)}</td><td>${fmt(c3)}</td><td style="font-weight:700;color:${sv2>=90?'var(--leaf)':sv2>=75?'var(--amber)':'var(--rust)'}">${sv2.toFixed(1)}%</td><td>${ml}</td><td><span class="stage-chip ${stageClass(b.stage)}">${b.stage}</span></td></tr>`;
+    }).join('')}</tbody></table></div>`;
+
+  // Stage Breakdown
+  const tskBatches=batches.filter(b=>b.stage==='TSK');
+  const tsbBatches=batches.filter(b=>['TSB','Culling 1','Culling 2','Culling 3'].includes(b.stage));
+  const completedBatches=batches.filter(b=>b.stage==='Complete');
+  const now=new Date();
+  // TSK age buckets
+  const tsk1mo=tskBatches.filter(b=>batchAge(b.dateplanted)===1).reduce((s,b)=>s+totalSeeds(b),0);
+  const tsk2mo=tskBatches.filter(b=>batchAge(b.dateplanted)===2).reduce((s,b)=>s+totalSeeds(b),0);
+  const tsk3moReady=tskBatches.filter(b=>batchAge(b.dateplanted)>=3).reduce((s,b)=>s+totalSeeds(b),0);
+  // TSB maturing
+  const tsb4to9=tsbBatches.filter(b=>{const a=batchAge(b.dateplanted);return a>=4&&a<10;}).reduce((s,b)=>s+totalSeeds(b),0);
+  const tsbMature=tsbBatches.filter(b=>batchAge(b.dateplanted)>=10).reduce((s,b)=>s+totalSeeds(b),0);
+  // Completed
+  const completedTotal=completedBatches.reduce((s,b)=>s+(b.received||b.doqty||0),0);
+
+  document.getElementById('rt-stages').innerHTML=`
+    <div class="stage-breakdown-grid">
+      <div class="sb-card">
+        <div class="sb-card-head sbh-green">🌱 Pre-Nursery (TSK) — ${tskBatches.length} batch${tskBatches.length!==1?'es':''}</div>
+        <div class="sb-card-body">
+          <div class="sb-row"><span class="sb-row-label">1 Month Old</span><span class="sb-row-val green">${fmt(tsk1mo)}</span></div>
+          <div class="sb-row"><span class="sb-row-label">2 Months Old</span><span class="sb-row-val green">${fmt(tsk2mo)}</span></div>
+          <div class="sb-row"><span class="sb-row-label">Ready to Transplant (≥3mo)</span><span class="sb-row-val teal">${fmt(tsk3moReady)}</span></div>
+        </div>
+      </div>
+      <div class="sb-card">
+        <div class="sb-card-head sbh-amber">🌿 Main Nursery (TSB) — ${tsbBatches.length} batch${tsbBatches.length!==1?'es':''}</div>
+        <div class="sb-card-body">
+          <div class="sb-row"><span class="sb-row-label">Maturing (4–9 months)</span><span class="sb-row-val amber">${fmt(tsb4to9)}</span></div>
+          <div class="sb-row"><span class="sb-row-label">Ready to Sell (10–12 months)</span><span class="sb-row-val teal">${fmt(tsbMature)}</span></div>
+          <div class="sb-row"><span class="sb-row-label">Total in Main Nursery</span><span class="sb-row-val green">${fmt(tsbBatches.reduce((s,b)=>s+totalSeeds(b),0))}</span></div>
+        </div>
+      </div>
+      <div class="sb-card">
+        <div class="sb-card-head sbh-teal">✅ Completed — ${completedBatches.length} batch${completedBatches.length!==1?'es':''}</div>
+        <div class="sb-card-body">
+          <div class="sb-row"><span class="sb-row-label">Total Seeds (original)</span><span class="sb-row-val green">${fmt(completedTotal)}</span></div>
+          <div class="sb-row"><span class="sb-row-label">Transferred to Store</span><span class="sb-row-val teal">${fmt(completedBatches.reduce((s,b)=>s+(b.transferData||[]).reduce((x,r)=>x+(r.qty||0),0),0))}</span></div>
+          <div class="sb-row"><span class="sb-row-label">Avg Survival Rate</span><span class="sb-row-val green">${completedBatches.length?((completedBatches.reduce((s,b)=>s+survRate(b),0)/completedBatches.length).toFixed(1)+'%'):'—'}</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="report-section-title" style="margin-top:1.5rem">✂️ Culling Progress by Batch</div>
+    <div class="culling-progress">
+      ${batches.map(b=>{
+        const c1Done=b.cull1Data&&b.cull1Data.length>0;
+        const c2Done=b.cull2Data&&b.cull2Data.length>0;
+        const c3Done=b.cull3Data&&b.cull3Data.length>0;
+        const isActive=['Culling 1','Culling 2','Culling 3'].includes(b.stage);
+        return`<div class="cp-batch">
+          <div class="cp-id">${b.id}</div>
+          <div class="cp-stages">
+            <span class="cp-stage ${c1Done?'cps-done':'cps-pending'}">1st Cull ${c1Done?'✓':'—'}</span>
+            <span class="cp-stage ${c2Done?'cps-done':isActive&&b.stage==='Culling 2'?'cps-active':'cps-pending'}">2nd Cull ${c2Done?'✓':'—'}</span>
+            <span class="cp-stage ${c3Done?'cps-done':isActive&&b.stage==='Culling 3'?'cps-active':'cps-pending'}">3rd Cull ${c3Done?'✓':'—'}</span>
+            <span class="cp-stage ${b.stage==='Complete'?'cps-done':'cps-pending'}">${b.stage==='Complete'?'Complete ✓':b.stage}</span>
+          </div>
+          <div class="cp-surv">${survRate(b).toFixed(1)}%</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  // Culling rates
+  document.getElementById('rt-culling').innerHTML=`<div class="table-wrap"><table>
+    <thead><tr><th>Batch</th><th>Seeds</th><th>1st Cull</th><th>%</th><th>2nd Cull</th><th>%</th><th>3rd Cull</th><th>%</th><th>Total %</th><th>Status</th></tr></thead>
+    <tbody>${batches.map(b=>{const s=b.received||b.doqty||0;const c1=(b.cull1Data||[]).reduce((x,r)=>x+(parseFloat(r.culled)||0),0);const c2=(b.cull2Data||[]).reduce((x,r)=>x+(parseFloat(r.dead||r.culled)||0),0);const c3=(b.cull3Data||[]).reduce((x,r)=>x+Math.max(0,(r.total||0)-(parseFloat(r.opisdata)||0)),0);const r1=s?c1/s*100:0,r2=s?c2/s*100:0,r3=s?c3/s*100:0,tot=r1+r2+r3;
+      return`<tr><td class="batch-id">${b.id}</td><td>${fmt(s)}</td><td>${fmt(c1)}</td><td style="color:${r1>10?'var(--rust)':'var(--leaf)'};font-weight:600">${r1.toFixed(1)}%</td><td>${fmt(c2)}</td><td style="color:${r2>10?'var(--rust)':'var(--leaf)'};font-weight:600">${r2.toFixed(1)}%</td><td>${fmt(c3)}</td><td style="color:${r3>10?'var(--rust)':'var(--leaf)'};font-weight:600">${r3.toFixed(1)}%</td><td style="font-weight:700;color:${tot<=20?'var(--leaf)':tot<=30?'var(--amber)':'var(--rust)'}">${tot.toFixed(1)}%</td><td>${tot<=20?'✅ Good':tot<=30?'⚠️ Monitor':'🔴 Alert'}</td></tr>`;
+    }).join('')}</tbody></table></div>`;
+
+  const allT=[...treatments].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('rt-treatment').innerHTML=`<div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Batch</th><th>Type</th><th>Product</th><th>Qty</th><th>Notes</th></tr></thead>
+    <tbody>${allT.length?allT.map(t=>`<tr><td>${t.date}</td><td class="batch-id">${t.batchId}</td><td><span class="tag">${t.type}</span></td><td>${t.product||'—'}</td><td>${t.qty||'—'}</td><td style="color:#8a7a68;font-size:.79rem">${t.notes||'—'}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:1.5rem;color:#bbb">No treatment records</td></tr>'}</tbody></table></div>`;
+}
+
+// TOAST
+function toast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.classList.remove('show'),3000);}
+
+// INVENTORY MODAL
+function openInventoryModal(){
+  const tbody=document.getElementById('inv-tbody');tbody.innerHTML='';
+  invStock.forEach((i,idx)=>{
+    tbody.insertAdjacentHTML('beforeend',`<tr>
+      <td><input type="text" class="iv-name" value="${i.name}" style="width:160px"/></td>
+      <td><select class="iv-cat" style="width:110px">
+        <option ${i.category==='Fertilizer'?'selected':''}>Fertilizer</option>
+        <option ${i.category==='Chemical'?'selected':''}>Chemical</option>
+        <option ${i.category==='Bag/Polybag'?'selected':''}>Bag/Polybag</option>
+        <option ${i.category==='Equipment'?'selected':''}>Equipment</option>
+        <option ${i.category==='Other'?'selected':''}>Other</option>
+      </select></td>
+      <td><input type="number" class="iv-qty" value="${i.qty}" style="width:80px;text-align:center"/></td>
+      <td><input type="text" class="iv-unit" value="${i.unit}" style="width:60px"/></td>
+      <td><input type="number" class="iv-min" value="${i.minqty}" style="width:70px;text-align:center"/></td>
+      <td><button type="button" class="btn-sm red" onclick="this.closest('tr').remove()">✕</button></td>
+    </tr>`);
+  });
+  document.getElementById('inv-modal').classList.add('open');
+}
+function addInvRow(){
+  document.getElementById('inv-tbody').insertAdjacentHTML('beforeend',`<tr>
+    <td><input type="text" class="iv-name" placeholder="Item name" style="width:160px"/></td>
+    <td><select class="iv-cat" style="width:110px"><option>Fertilizer</option><option>Chemical</option><option>Bag/Polybag</option><option>Equipment</option><option>Other</option></select></td>
+    <td><input type="number" class="iv-qty" value="0" style="width:80px;text-align:center"/></td>
+    <td><input type="text" class="iv-unit" value="kg" style="width:60px"/></td>
+    <td><input type="number" class="iv-min" value="0" style="width:70px;text-align:center"/></td>
+    <td><button type="button" class="btn-sm red" onclick="this.closest('tr').remove()">✕</button></td>
+  </tr>`);
+}
+function saveInventory(){
+  invStock=Array.from(document.querySelectorAll('#inv-tbody tr')).map((r,i)=>({
+    id:i+1,
+    name:r.querySelector('.iv-name')?.value||'',
+    category:r.querySelector('.iv-cat')?.value||'Other',
+    qty:parseFloat(r.querySelector('.iv-qty')?.value)||0,
+    unit:r.querySelector('.iv-unit')?.value||'',
+    minqty:parseFloat(r.querySelector('.iv-min')?.value)||0,
+  })).filter(i=>i.name);
+  saveInv();closeInventoryModal();initDash();toast('Inventory updated ✓','success');
+}
+function closeInventoryModal(){document.getElementById('inv-modal').classList.remove('open');}
+document.getElementById('inv-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeInventoryModal();});
+
+// Close on overlay
+document.getElementById('batch-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+document.getElementById('detail-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeDetailModal();});
+document.getElementById('sale-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeSaleModal();});
+</script>
+</body>
+</html>
